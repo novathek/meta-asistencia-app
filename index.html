@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="App de asistencia para Aplicadores y Veedores" />
+  <title>Asistencia · SINIDE</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 0 — SELECTOR DE ROL
+  ══════════════════════════════════════════════ -->
+  <div class="screen active" id="screen-role">
+    <div class="app-header">
+      <div class="logo-ring">📋</div>
+      <h1 class="app-title">Control de<br/><span>Asistencia</span></h1>
+      <p class="app-subtitle">Operativo SINIDE · Catamarca</p>
+    </div>
+
+    <p style="text-align:center; color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">
+      Seleccioná tu rol para continuar
+    </p>
+
+    <div class="role-cards">
+      <button class="role-card aplicadores" id="btn-role-aplicador" onclick="App.selectRole('aplicador')">
+        <div class="icon">🧑‍🏫</div>
+        <div class="role-name">Aplicadores</div>
+        <div class="role-desc">Accedé con tu número de DNI</div>
+      </button>
+      <button class="role-card veedores" id="btn-role-veedor" onclick="App.selectRole('veedor')">
+        <div class="icon">👁️</div>
+        <div class="role-name">Veedores</div>
+        <div class="role-desc">Accedé con tu nombre y apellido</div>
+      </button>
+    </div>
+
+    <div style="margin-top:auto; padding-top:32px; text-align:center;">
+      <button class="fab-export" id="btn-export-fab" onclick="App.openAdmin()" style="position:relative;bottom:auto;right:auto;display:inline-flex;">
+        ⬇️ Exportar asistencia
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 1 — LOGIN APLICADOR (por DNI)
+  ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-aplicador">
+    <button class="btn-back" onclick="App.goHome()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Volver
+    </button>
+
+    <div class="screen-header">
+      <div class="chip">🧑‍🏫 Aplicador</div>
+      <h2 class="screen-title">Ingresá tu DNI</h2>
+      <p class="screen-desc">Sin puntos ni espacios</p>
+    </div>
+
+    <div class="form-group">
+      <input
+        class="form-input input-dni"
+        id="input-dni"
+        type="tel"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        placeholder="Ej: 32756190"
+        maxlength="8"
+        autocomplete="off"
+        oninput="App.onDniInput()"
+      />
+    </div>
+
+    <div id="alert-aplicador"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-buscar-dni" onclick="App.buscarAplicador()" disabled>
+        <span id="btn-buscar-dni-text">Buscar</span>
+        <div class="spinner" id="spinner-dni" style="display:none;"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 2 — LOGIN VEEDOR (por nombre)
+  ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-veedor">
+    <button class="btn-back" onclick="App.goHome()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Volver
+    </button>
+
+    <div class="screen-header">
+      <div class="chip veedor">👁️ Veedor</div>
+      <h2 class="screen-title">Ingresá tu nombre</h2>
+      <p class="screen-desc">Escribí apellido y nombre (o parte del mismo)</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="input-nombre">Apellido y nombre</label>
+      <input
+        class="form-input"
+        id="input-nombre"
+        type="text"
+        placeholder="Ej: Ferreyra Selva"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        oninput="App.onNombreInput()"
+      />
+    </div>
+
+    <div id="alert-veedor"></div>
+    <div id="results-veedor" class="results-list"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-buscar-nombre" onclick="App.buscarVeedor()" disabled>
+        <span id="btn-buscar-nombre-text">Buscar</span>
+        <div class="spinner" id="spinner-nombre" style="display:none;"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 3 — CONFIRMAR ASISTENCIA (encontrado)
+  ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-confirmar">
+    <button class="btn-back" id="btn-back-confirmar" onclick="App.goBack()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Volver
+    </button>
+
+    <div class="screen-header">
+      <div class="chip" id="chip-confirmar">✅ Encontrado</div>
+      <h2 class="screen-title">Confirmá tu asistencia</h2>
+    </div>
+
+    <div class="person-card" id="person-card"></div>
+
+    <div id="alert-confirmar"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-success" id="btn-confirmar" onclick="App.confirmarAsistencia()">
+        <span id="btn-confirmar-text">✓ Registrar asistencia</span>
+        <div class="spinner" id="spinner-confirmar" style="display:none;"></div>
+      </button>
+      <button class="btn btn-outline" onclick="App.goHome()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 4 — INSCRIPCIÓN (no encontrado)
+  ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-inscripcion">
+    <button class="btn-back" onclick="App.goBack()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Volver
+    </button>
+
+    <div class="screen-header">
+      <div class="chip" style="background:rgba(245,158,11,0.2);color:#fcd34d;">⚠️ No registrado</div>
+      <h2 class="screen-title">Inscribir persona</h2>
+      <p class="screen-desc">Completá los datos para registrarte en el sistema</p>
+    </div>
+
+    <div class="scroll-body">
+      <form id="form-inscripcion" autocomplete="off">
+        <!-- APLICADOR fields -->
+        <div id="fields-aplicador">
+          <div class="form-group">
+            <label class="form-label" for="insc-apellido-nombre">Apellido y Nombre *</label>
+            <input class="form-input" id="insc-apellido-nombre" type="text" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-dni-ap">DNI *</label>
+            <input class="form-input" id="insc-dni-ap" type="tel" inputmode="numeric" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-cue-ap">CUE (código de escuela) *</label>
+            <input class="form-input" id="insc-cue-ap" type="text" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-mail-ap">E-mail</label>
+            <input class="form-input" id="insc-mail-ap" type="email" inputmode="email" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-cargo-ap">Cargo</label>
+            <input class="form-input" id="insc-cargo-ap" type="text" placeholder="Ej: Mtro. de grado" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-turno-ap">Turno</label>
+            <select class="form-input" id="insc-turno-ap">
+              <option value="">Seleccioná...</option>
+              <option>Mañana</option>
+              <option>Tarde</option>
+              <option>Noche</option>
+              <option>Vespertino</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-telefono-ap">Teléfono</label>
+            <input class="form-input" id="insc-telefono-ap" type="tel" inputmode="numeric" />
+          </div>
+        </div>
+
+        <!-- VEEDOR fields -->
+        <div id="fields-veedor" style="display:none;">
+          <div class="form-group">
+            <label class="form-label" for="insc-apellido-nombre-v">Apellido y Nombre *</label>
+            <input class="form-input" id="insc-apellido-nombre-v" type="text" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-cue-v">CUE (código de escuela) *</label>
+            <input class="form-input" id="insc-cue-v" type="text" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-turno-v">Turno</label>
+            <select class="form-input" id="insc-turno-v">
+              <option value="">Seleccioná...</option>
+              <option>Mañana</option>
+              <option>Tarde</option>
+              <option>Noche</option>
+              <option>Vespertino</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-escuela-v">Escuela de referencia</label>
+            <input class="form-input" id="insc-escuela-v" type="text" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-telefono-v">Teléfono</label>
+            <input class="form-input" id="insc-telefono-v" type="tel" inputmode="numeric" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="insc-mail-v">E-mail</label>
+            <input class="form-input" id="insc-mail-v" type="email" inputmode="email" />
+          </div>
+        </div>
+      </form>
+      <div id="alert-inscripcion"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-inscribir" onclick="App.inscribir()">
+        <span id="btn-inscribir-text">📝 Inscribir y registrar asistencia</span>
+        <div class="spinner" id="spinner-inscribir" style="display:none;"></div>
+      </button>
+      <button class="btn btn-outline" onclick="App.goHome()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 5 — ÉXITO
+  ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-success">
+    <div class="success-center">
+      <div class="check-ring">✓</div>
+      <div>
+        <div class="success-name" id="success-name">Nombre Apellido</div>
+        <div class="success-sub" id="success-sub">Asistencia registrada correctamente</div>
+      </div>
+      <div id="success-details" style="color:var(--text-muted);font-size:0.85rem;text-align:center;"></div>
+      <div class="countdown-bar">
+        <div class="countdown-fill" id="countdown-fill"></div>
+      </div>
+      <p style="color:var(--text-dim);font-size:0.8rem;">Volviendo al inicio...</p>
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<!-- ════════════════════════════════════════════
+     ADMIN / EXPORT MODAL
+════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-admin" onclick="App.closeAdminIfOutside(event)">
+  <div class="modal-sheet">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <div class="modal-title">📊 Panel de asistencia</div>
+      <button onclick="App.closeAdmin()" style="background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer;line-height:1;">×</button>
+    </div>
+    <div class="modal-sub">Registros de hoy</div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-total">—</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-aplicadores" style="color:var(--accent)">—</div>
+        <div class="stat-label">Aplicadores</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-veedores" style="color:#a78bfa">—</div>
+        <div class="stat-label">Veedores</div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button class="btn btn-primary" id="btn-export-excel" onclick="App.exportExcel()">
+        ⬇️ Exportar asistencia a Excel
+      </button>
+      <button class="btn btn-outline" onclick="App.closeAdmin()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ Scripts ════════ -->
+<script src="data.js"></script>
+<script src="firebase-config.js"></script>
+
+<!-- Firebase SDK (modular compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<!-- SheetJS for Excel export -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+
+<script src="app.js"></script>
+</body>
+</html>
