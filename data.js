@@ -1,5 +1,5 @@
 // AUTO-GENERATED — do not edit manually
-// Aplicadores: 538 | Veedores: 84
+// Aplicadores: 538 | Veedores: 84 | Directivos: 57
 const DB = {
   "aplicadores": [
     {
@@ -7467,6 +7467,635 @@ const DB = {
       "observaciones": "Veedor titular",
       "escuela_ref": "COLEGIO MONTESORI SECUNDARIA",
       "cargo_campo": "Veedor"
+    }
+  ],
+  "directivos": [
+    {
+      "cue": "100083400",
+      "nivel": "PRIMARIA",
+      "escuela": "196 GOBERNADOR CRISANTO GOMEZ",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "MIRIAN ROPELLATO",
+      "cargo": "DIRECTOR",
+      "dni": 23054655,
+      "mail": "Mirianmaestra@gmail.com"
+    },
+    {
+      "cue": "100007800",
+      "nivel": "SECUNDARIA",
+      "escuela": "COLEGIO PRIVADO JUAN PABLO II",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "MARIA DE LOS ANGELES CARRIZO PAEZ",
+      "cargo": "DIRECTOR",
+      "dni": 21325197,
+      "mail": "m555cp@hotmail.com"
+    },
+    {
+      "cue": "100002000",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N°180 REPÚBLICA ARGENTINA",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "SUSANA BEATRIZ HERRERA",
+      "cargo": "DIRECTOR",
+      "dni": 22291061,
+      "mail": "escuela180catamarca@gmail.com"
+    },
+    {
+      "cue": "100002700",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N°182 LUIS LEOPOLDO FRANCO",
+      "turno": "Tarde",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "SORAYA TERESITA CARPIO",
+      "cargo": "DIRECTOR",
+      "dni": 20071836,
+      "mail": "sorayacarpio2009@hotmail.com"
+    },
+    {
+      "cue": "100044200",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA PRIVADA VIRGEN NIÑA",
+      "turno": "Tarde",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "ANDREA CELESTE SANDUAY",
+      "cargo": "VICEDIRECTOR",
+      "dni": 35387723,
+      "mail": "andysanduay7@gmail.com"
+    },
+    {
+      "cue": "100008600",
+      "nivel": "SECUNDARIA",
+      "escuela": "EPET N 7",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "ANALIA NOEMÍ CORSO",
+      "cargo": "VICEDIRECTORA",
+      "dni": 23866444,
+      "mail": "Analia-corso@hotmail.com"
+    },
+    {
+      "cue": "100040600",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N°162 \"9 DE JULIO\"",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "NELLY MIRANDA",
+      "cargo": "DIRECTOR",
+      "dni": 13223992,
+      "mail": "nellymiranda811@gmail.com"
+    },
+    {
+      "cue": "100007400",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA PROVINCIAL DE EDUCACION TECNICA Nª6 \"MAESTRO MARIANO FERNANDO PIERI\"",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "EVANGELINA SOLANGE ANCE",
+      "cargo": "COORDINADORA DE FUNDAMENTACION BASICA",
+      "dni": 28780750,
+      "mail": "Esance51@gmail.com"
+    },
+    {
+      "cue": "100007300",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA PROVINCIAL DE MINERIA \" DR.BERNARDO HOUSSAY\"",
+      "turno": "Tarde",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "IVANA YANEL ROMAY",
+      "cargo": "COORDINADORA DE FUNDAMENTACION BASICA",
+      "dni": 30375875,
+      "mail": "Ivanaromay@gmail.com"
+    },
+    {
+      "cue": "100040400",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 126 BARRIO APOLO",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "ALFREDO DIAZ",
+      "cargo": "DIRECTOR",
+      "dni": 21748278,
+      "mail": "alfredodiaztucu13@gmail.com"
+    },
+    {
+      "cue": "100084200",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 195 REVOLUCIÓN DE MAYO",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "CRISTIAN BAZAN",
+      "cargo": "COLABORADOR ADMINISTRATIVO",
+      "dni": 34187068,
+      "mail": "Cristianbazan200424@gmail.com"
+    },
+    {
+      "cue": "100069400",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N 992",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "MARÍA DE LOS ANGELES CARRIZO",
+      "cargo": "VICEDIRECTOR",
+      "dni": 22130532,
+      "mail": "Carrizomariadelosangeles46@gmail.com"
+    },
+    {
+      "cue": "100091400",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA SECUNDARIA 92",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "PATRICIA JOTAYAN",
+      "cargo": "VICEDIRECTORA",
+      "dni": 23056283,
+      "mail": "jotayanpatricia8@gmail.com"
+    },
+    {
+      "cue": "100008100",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 323 JUAN ALFONSO CARRIZO",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "SORAYA PALOMEQUE",
+      "cargo": "DIRECTOR",
+      "dni": 22654477,
+      "mail": "Sorylupalomeque@gmail.com"
+    },
+    {
+      "cue": "100040300",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA SECUNDARIA 50",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "LAURA CECILIA ATENCIO",
+      "cargo": "DIRECTOR",
+      "dni": 23854799,
+      "mail": "secundariacomun50@catamarca.edu.ar"
+    },
+    {
+      "cue": "100090600",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA SECUNDARIA 84",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "ESTHER ELIZABETH OVEJERO",
+      "cargo": "DIRECTOR",
+      "dni": 25818168,
+      "mail": "secundariacomun84@catamarca.edu.ar"
+    },
+    {
+      "cue": "100040700",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA SECUNDARIA N 6 CACIQUE JUAN CHELEMIN",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "GABRIELA SONIACUELLO",
+      "cargo": "VICEDIRECTOR",
+      "dni": 22515189,
+      "mail": "Gabrielasoniacuello22@gmail.con"
+    },
+    {
+      "cue": "100080500",
+      "nivel": "PRIMARIA",
+      "escuela": "COLEGIO MONTESORI",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "KARINA DONATO",
+      "cargo": "DIRECTOR",
+      "dni": 18648505,
+      "mail": "Karinadonato28@gmail"
+    },
+    {
+      "cue": "100063300",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N15",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "RAÚL ESTEBAN OJEDA",
+      "cargo": "VICEDIRECTOR",
+      "dni": 23484064,
+      "mail": "Esc15.ntra.sra.del.valle@gmail.com"
+    },
+    {
+      "cue": "100063100",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA N49",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "MARÍA LORENA ZARATE",
+      "cargo": "DIRECTOR",
+      "dni": 24379779,
+      "mail": "Escuelasecundaria49@gmail.com"
+    },
+    {
+      "cue": "100091500",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA SECUNDARIA N° 93",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "LÍA DEL VALLE HERRERA",
+      "cargo": "DIRECTOR",
+      "dni": 23854268,
+      "mail": "Lia070374@gmail.com"
+    },
+    {
+      "cue": "100077300",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N°198 HUAYRA PUNCO",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "MARTHA DEL VALLE ORELLANA",
+      "cargo": "DIRECTOR",
+      "dni": 21326112,
+      "mail": "escuelahuayrapunco198@gmail.com"
+    },
+    {
+      "cue": "100042600",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N324 ELVIRA GRELLET DE CARO",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "MARÍA ANTONIA JALIL",
+      "cargo": "DIRECTOR",
+      "dni": 20803069,
+      "mail": "Mj3926914@gmail.com"
+    },
+    {
+      "cue": "100091100",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA SECUNDARIA 89",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "DELCY ZAIDA CARPIO CARRILLO",
+      "cargo": "DIRECTOR",
+      "dni": 18828053,
+      "mail": "secundariacomun89@catamarca.edu.ar"
+    },
+    {
+      "cue": "100034700",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA SECUNDARIA N°48 \"PBRO.RAMON ROSA OLMOS\"",
+      "turno": "Tarde",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "IVANNA RAMOS",
+      "cargo": "VICEDIRECTOR",
+      "dni": 31401649,
+      "mail": "Ivanna_ramos85@hotmail.com"
+    },
+    {
+      "cue": "100061000",
+      "nivel": "PRIMARIA",
+      "escuela": "COLEGIO FASTA PRIMARIO",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "LUCIANA PERRETTO",
+      "cargo": "VICEDIRECTORA",
+      "dni": 26089477,
+      "mail": "lperretta@redfasta.edu.ar"
+    },
+    {
+      "cue": "100060700",
+      "nivel": "SECUNDARIA",
+      "escuela": "COLEGIO PIA SECUNDARIO",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "MARIA VERONICA OLIVA",
+      "cargo": "DIRECTOR",
+      "dni": 27053420,
+      "mail": "veronik_1979@hotmail.com"
+    },
+    {
+      "cue": "100008800",
+      "nivel": "PRIMARIA",
+      "escuela": "COLEGIO PRIVADO GENERAL MANUEL BELGRANO",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "VALERIA SONIA AUGIER",
+      "cargo": "VICEDIRECTOR",
+      "dni": 27270961,
+      "mail": "valeriaaugier99@gmail.com"
+    },
+    {
+      "cue": "100002400",
+      "nivel": "PRIMARIA",
+      "escuela": "INSTITUTO SUPERIOR ENRIQUE GUILLERMO HOOD",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "DAYANA ANDREA NIEVA",
+      "cargo": "SECRETARIO",
+      "dni": 35249056,
+      "mail": "Nievadayana@gmail.com"
+    },
+    {
+      "cue": "100061300",
+      "nivel": "SECUNDARIA",
+      "escuela": "COLEGIO PRIVADO PADRE RAMÓN DE LA QUINTANA",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "GABRIEL ALBERTO SUAYA",
+      "cargo": "VICEDIRECTOR",
+      "dni": 31450665,
+      "mail": "vdns1@cef-quintana-cat.edu.ar"
+    },
+    {
+      "cue": "100034500",
+      "nivel": "PRIMARIA",
+      "escuela": "COLEGIO SANTA ROSA DE LIMA",
+      "turno": "Tarde",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "KARINA DÍAZ",
+      "cargo": "DIRECTOR",
+      "dni": 24757102,
+      "mail": "Karinadiaz@cristoreycolegio.edu.ar"
+    },
+    {
+      "cue": "100009700",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N° 127 SAN JOSE OBRERO",
+      "turno": "Tarde",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "FABIANA  BEPRE",
+      "cargo": "VICEDIRECTOR",
+      "dni": 20548348,
+      "mail": "Fabianaestela.4@gmail.com"
+    },
+    {
+      "cue": "100002800",
+      "nivel": "SECUNDARIA",
+      "escuela": "COLEGIO PRIVADO SRA. DEL VALLE\"",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "CRISTIAN FERNANDO PONCE MARTÍNEZ",
+      "cargo": "VICEDIRECTOR",
+      "dni": 24309402,
+      "mail": "Vicecolegionuestrasradelvalle@gmail.com"
+    },
+    {
+      "cue": "100034400",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 428 DR ENRIQUE OCAMPO",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "SILVINA MERCEDES SOLOHAGA",
+      "cargo": "DIRECTOR",
+      "dni": 22751948,
+      "mail": "silvinasolohaga90@gmail.com"
+    },
+    {
+      "cue": "100007700",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N° 701 C. J. ARMSTRONG",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "DANTE MARCOS RAFAEL QUIROGA",
+      "cargo": "VICEDIRECTOR",
+      "dni": 32740470,
+      "mail": "dmr6131@gmail.com"
+    },
+    {
+      "cue": "100034600",
+      "nivel": "SECUNDARIA",
+      "escuela": "ESCUELA SECUNDARIA N°7 GRAL JOSÉ MARIA PAZ",
+      "turno": "Mañana",
+      "localidad": "SAN FERNANDO DEL VALLE DE CATAMARCA",
+      "apellido_nombre": "MARIA RUIZ DIAZ",
+      "cargo": "DIRECTOR",
+      "dni": 32415257,
+      "mail": "secundariacomun7@catamarca.edu.ar"
+    },
+    {
+      "cue": "100085800",
+      "nivel": "SECUNDARIA",
+      "escuela": "CENTRO EDUCATIVO 4 DR. ROMES RAIDEN",
+      "turno": "Mañana",
+      "localidad": "SANTA ROSA",
+      "apellido_nombre": "SOFÍA INÉS RAMOS",
+      "cargo": "ACESORA PEDAGÓGICA",
+      "dni": 38225054,
+      "mail": "Sofines2595@gmail.com"
+    },
+    {
+      "cue": "100082700",
+      "nivel": "PRIMARIA",
+      "escuela": "CENTRO EDUCATIVO N°3",
+      "turno": "Mañana",
+      "localidad": "SAN ISIDRO",
+      "apellido_nombre": "ROSALIA OVIEDO",
+      "cargo": "SECRETARIO",
+      "dni": 34029405,
+      "mail": "rosaliaoviedo.ro@gmail.com"
+    },
+    {
+      "cue": "100062200",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N° 272 PROVINCIA DE CORRIENTES",
+      "turno": "Mañana",
+      "localidad": "VILLA DOLORES",
+      "apellido_nombre": "LAURA ESPILOCIN",
+      "cargo": "VICEDIRECTOR",
+      "dni": 24830661,
+      "mail": "espilocinlaura@gmail.com"
+    },
+    {
+      "cue": "100054100",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N°201 WOLF SCHCOLNIK",
+      "turno": "Mañana",
+      "localidad": "SUMALAO",
+      "apellido_nombre": "VICTOR DANIEL MARCELO MARTINEZ",
+      "cargo": "DIRECTOR",
+      "dni": 18202738,
+      "mail": "marcelo_martinez67@hotmail.com"
+    },
+    {
+      "cue": "100060400",
+      "nivel": "SECUNDARIA",
+      "escuela": "COLEGIO PRIVADO NUESTRA SEÑORA DE GUADALUPE",
+      "turno": "Mañana",
+      "localidad": "SAN ISIDRO",
+      "apellido_nombre": "DANIELA GIMENA DIAZ",
+      "cargo": "DIRECTOR",
+      "dni": 25746159,
+      "mail": "secretariasecundarioguadalupe@gmail.com"
+    },
+    {
+      "cue": "100064200",
+      "nivel": "PRIMARIA",
+      "escuela": "COLEGIO PRIVADO JUAN CAYETANO BIANCHI",
+      "turno": "Tarde",
+      "localidad": "SAUJIL",
+      "apellido_nombre": "NORMA ESTHER REYNOSO",
+      "cargo": "DIRECTOR",
+      "dni": 31398966,
+      "mail": "Normareynososaujil@gmail.com"
+    },
+    {
+      "cue": "100057400",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 227 PROVINCIA DE RIO NEGRO",
+      "turno": "Mañana",
+      "localidad": "SAUJIL",
+      "apellido_nombre": "DANIELA BEATRIZ QUIROGA",
+      "cargo": "DIRECTOR",
+      "dni": 21861724,
+      "mail": "Mymdq67@gmail.com"
+    },
+    {
+      "cue": "100085500",
+      "nivel": "SECUNDARIA",
+      "escuela": "EPET N8",
+      "turno": "Tarde",
+      "localidad": "POMAN",
+      "apellido_nombre": "LUIS RICARDO ARGAÑARAZ",
+      "cargo": "DIRECTOR",
+      "dni": 31249453,
+      "mail": "Tecnica8.saujil@catamarca.edu.ar"
+    },
+    {
+      "cue": "100024400",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 334 MARÍA DEL CARMEN FUENZALIDA",
+      "turno": "Mañana",
+      "localidad": "COLPES",
+      "apellido_nombre": "ANÍBAL SERGIO ARANDA",
+      "cargo": "DIRECTOR",
+      "dni": 18557349,
+      "mail": "Anibalaranda.aa@gmail.com"
+    },
+    {
+      "cue": "100057500",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 391",
+      "turno": "Mañana",
+      "localidad": "SAN MIGUEL",
+      "apellido_nombre": "MABEL DEL VALLE CONTRERAS",
+      "cargo": "DIRECTOR",
+      "dni": 20223084,
+      "mail": "Mcontrerassalcedo@gmail.com"
+    },
+    {
+      "cue": "100024900",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 295 JULIO ARGENTINO ROCA",
+      "turno": "Mañana",
+      "localidad": "RINCON",
+      "apellido_nombre": "SUSANA DEL CARMEN CATIVA",
+      "cargo": "DIRECTOR",
+      "dni": 21861708,
+      "mail": "Susanacativa5@gmail.com"
+    },
+    {
+      "cue": "100052000",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 394 PRESIDENCIA DE LA NACIÓN",
+      "turno": "Mañana",
+      "localidad": "EL PAJONAL",
+      "apellido_nombre": "OFELIA DEL CARMEN NIEVA",
+      "cargo": "DIRECTOR",
+      "dni": 20511839,
+      "mail": "Nievaofeliadelcarmen@gmail.com"
+    },
+    {
+      "cue": "100004500",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 228 BARTOLOMÉ MITRE",
+      "turno": "Mañana",
+      "localidad": "MUTQUIN",
+      "apellido_nombre": "MARIANELA ZULEMA RODRÍGUEZ",
+      "cargo": "DIRECTOR",
+      "dni": 25293404,
+      "mail": "Marianelarodriguez155@gmail.com"
+    },
+    {
+      "cue": "100004600",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 392 DANIEL DE JESÚS OVEJERO",
+      "turno": "Mañana",
+      "localidad": "SIJAN",
+      "apellido_nombre": "SILVIA NANCY QUIROGA",
+      "cargo": "DIRECTOR",
+      "dni": 23982261,
+      "mail": "Silnancy74@gmail.com"
+    },
+    {
+      "cue": "100050600",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 294 PROVINCIA DE LA RIOJA",
+      "turno": "Mañana",
+      "localidad": "POMAN",
+      "apellido_nombre": "PATRICIA ALEJANDRA NIEVA",
+      "cargo": "DIRECTOR",
+      "dni": 21520190,
+      "mail": "Patricianievacolana@gmail.com"
+    },
+    {
+      "cue": "100042100",
+      "nivel": "PRIMARIA",
+      "escuela": "COLEGIO CLORINDA ORELLANA HERRERA",
+      "turno": "Tarde",
+      "localidad": "CHUMBICHA",
+      "apellido_nombre": "INES ELIZABETH ROMERO",
+      "cargo": "DIRECTOR",
+      "dni": 23104125,
+      "mail": "Elizabeth.inesromero23@gmail.com"
+    },
+    {
+      "cue": "100068000",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N490",
+      "turno": "Mañana",
+      "localidad": "MIRAFLORES",
+      "apellido_nombre": "ROSANA MARISABALASTEGUI",
+      "cargo": "DIRECTOR",
+      "dni": 23677603,
+      "mail": "rosanagalastegui@gmail.com"
+    },
+    {
+      "cue": "100033400",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N98 ANTONIA BENAVENTTI DE BULACIO",
+      "turno": "Mañana",
+      "localidad": "SAN JERONIMO",
+      "apellido_nombre": "RITA ALEJANDRA QUEVEDO",
+      "cargo": "DIRECTOR",
+      "dni": 25254990,
+      "mail": "Ritaquev2@gmail.com"
+    },
+    {
+      "cue": "100066500",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA N36 PAOLA ALBARRACÍN DE SARMIENTO",
+      "turno": "Mañana",
+      "localidad": "HUILLAPIMA",
+      "apellido_nombre": "RITA MONICA DÍAZ",
+      "cargo": "PROFESORA A CARGO DE LA DIRECCIÓN",
+      "dni": 20675269,
+      "mail": "Diazmonica539@gmail.com"
+    },
+    {
+      "cue": "100041700",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA PRIMARIA N29",
+      "turno": "Mañana",
+      "localidad": "COLONIA NUEVA CONETA",
+      "apellido_nombre": "JUAN MARTINEZ",
+      "cargo": "DIRECTOR",
+      "dni": 21944358,
+      "mail": "Martinezjuanramon750@gmail.com"
+    },
+    {
+      "cue": "100062600",
+      "nivel": "PRIMARIA",
+      "escuela": "ESCUELA 285 PROVINCIA DE CHACO",
+      "turno": "Mañana",
+      "localidad": "HUILLAPIMA",
+      "apellido_nombre": "MARIS ESPINOSA",
+      "cargo": "VICEDIRECTOR",
+      "dni": 20780243,
+      "mail": "Maespinosa2569@gmail.com"
     }
   ]
 };

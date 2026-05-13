@@ -60,10 +60,12 @@ const Admin = {
     const total = this.records.length;
     const ap    = this.records.filter(r => r.role === 'aplicador').length;
     const ve    = this.records.filter(r => r.role === 'veedor').length;
+    const di    = this.records.filter(r => r.role === 'directivo').length;
 
-    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-total').textContent       = total;
     document.getElementById('stat-aplicadores').textContent = ap;
-    document.getElementById('stat-veedores').textContent = ve;
+    document.getElementById('stat-veedores').textContent    = ve;
+    document.getElementById('stat-directivos').textContent  = di;
   },
 
   renderList() {
@@ -81,9 +83,11 @@ const Admin = {
     }
 
     container.innerHTML = filteredRecords.map(r => {
-      const isAp = r.role === 'aplicador';
-      const badge = `<span class="badge ${r.role}">${isAp ? 'Aplicador' : 'Veedor'}</span>`;
-      const idInfo = isAp ? `DNI: ${r.dni || 'S/D'}` : `CUE: ${r.cue || 'S/D'}`;
+      const roleLabels = { aplicador: 'Aplicador', veedor: 'Veedor', directivo: 'Directivo' };
+      const badge = `<span class="badge ${r.role}">${roleLabels[r.role] || r.role}</span>`;
+      const idInfo = r.role === 'veedor'
+        ? `CUE: ${r.cue || 'S/D'}`
+        : `DNI: ${r.dni || 'S/D'}`;
       const nuevoTxt = r.esNuevo ? ' <span style="color:var(--md-warning);font-size:0.75rem;">(Inscripción Nueva)</span>' : '';
 
       return `

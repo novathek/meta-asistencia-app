@@ -91,6 +91,25 @@
             </div>
           </button>
 
+          <button class="role-card directivos" id="btn-role-directivo" onclick="App.selectRole('directivo')">
+            <div class="role-card-leading">
+              <!-- Star/admin icon -->
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3L9.27 8.63L3 9.49l4.5 4.37-1.06 6.18L12 17.27l5.56 2.77-1.06-6.18L21 9.49l-6.27-.86z"/>
+              </svg>
+            </div>
+            <div class="role-card-body">
+              <div class="role-card-title">Directivos</div>
+              <div class="role-card-sub">Ingresá con tu número de DNI</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </button>
+
         </div>
 
         <div class="export-row">
@@ -139,10 +158,50 @@
       <div id="alert-aplicador"></div>
       <div id="results-aplicador" class="results-list"></div>
 
-      <div class="btn-row">
+      <div class="btn-row" style="margin-top:0;">
         <button class="btn btn-filled" id="btn-buscar-dni" onclick="App.buscarAplicador()" disabled>
           <span id="btn-buscar-dni-text">Buscar</span>
           <div class="spinner" id="spinner-dni" style="display:none;"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 1b — LOGIN DIRECTIVO
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-directivo">
+
+      <div class="top-app-bar">
+        <button class="icon-btn" onclick="App.goHome()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <span class="top-app-bar-title">Directivos</span>
+      </div>
+
+      <div class="screen-header">
+        <div class="screen-header-label directivos">Ingreso por DNI</div>
+        <h2 class="screen-title">Ingresá tu DNI</h2>
+        <p class="screen-desc">Sin puntos ni espacios</p>
+      </div>
+
+      <div style="padding: 0 16px;">
+        <div class="text-field">
+          <label class="text-field-label" for="input-dni-dir">Número de documento</label>
+          <input class="text-field-input input-dni" id="input-dni-dir" type="tel" inputmode="numeric" pattern="[0-9]*"
+            placeholder="00000000" maxlength="8" autocomplete="off" oninput="App.onDniDirInput()" />
+        </div>
+      </div>
+
+      <div id="alert-directivo"></div>
+      <div id="results-directivo" class="results-list"></div>
+
+      <div class="btn-row" style="margin-top:0;">
+        <button class="btn btn-filled directivos" id="btn-buscar-dni-dir" onclick="App.buscarDirectivo()" disabled>
+          <span id="btn-buscar-dni-dir-text">Buscar</span>
+          <div class="spinner" id="spinner-dni-dir" style="display:none;"></div>
         </button>
       </div>
     </div>
@@ -259,8 +318,8 @@
               <input class="text-field-input" id="insc-dni-ap" type="tel" inputmode="numeric" required />
             </div>
             <div class="text-field">
-              <label class="text-field-label" for="insc-cue-ap">CUE (código de escuela) *</label>
-              <input class="text-field-input" id="insc-cue-ap" type="text" required />
+              <label class="text-field-label" for="insc-cue-ap">CUE (código de escuela)</label>
+              <input class="text-field-input" id="insc-cue-ap" type="text" />
             </div>
             <div class="text-field">
               <label class="text-field-label" for="insc-mail-ap">E-mail</label>
@@ -293,8 +352,8 @@
               <input class="text-field-input" id="insc-apellido-nombre-v" type="text" required />
             </div>
             <div class="text-field">
-              <label class="text-field-label" for="insc-cue-v">CUE (código de escuela) *</label>
-              <input class="text-field-input" id="insc-cue-v" type="text" required />
+              <label class="text-field-label" for="insc-cue-v">CUE (código de escuela)</label>
+              <input class="text-field-input" id="insc-cue-v" type="text" />
             </div>
             <div class="text-field">
               <label class="text-field-label" for="insc-turno-v">Turno</label>

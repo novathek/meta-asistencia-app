@@ -274,6 +274,12 @@ body {
   background: var(--md-secondary-container);
   color: var(--md-secondary);
 }
+.role-card.directivos .role-card-leading {
+  background: #FEF3C7;
+  color: #92400E;
+}
+.role-card.directivos .role-card-title    { color: #92400E; }
+.role-card.directivos .role-card-trailing { color: #D97706; }
 
 .role-card-body { flex: 1; }
 
@@ -320,6 +326,10 @@ body {
 .screen-header-label.warning {
   background: var(--md-warning-container);
   color: var(--md-warning);
+}
+.screen-header-label.directivos {
+  background: #FEF3C7;
+  color: #92400E;
 }
 
 .screen-title {
@@ -442,6 +452,12 @@ body {
 }
 .btn-filled-success:hover  { box-shadow: var(--elev-3); filter: brightness(1.06); transform: translateY(-2px); }
 .btn-filled-success:active { box-shadow: none; transform: translateY(1px) scale(0.98); }
+
+/* Filled directivos (amber) */
+.btn-filled.directivos {
+  background: #D97706;
+  color: #fff;
+}
 
 /* Outlined */
 .btn-outlined {

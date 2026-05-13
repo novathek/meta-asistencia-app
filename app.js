@@ -92,6 +92,13 @@ const App = {
       document.getElementById('btn-buscar-dni').disabled = true;
       showScreen('screen-aplicador');
       setTimeout(() => document.getElementById('input-dni').focus(), 350);
+    } else if (role === 'directivo') {
+      document.getElementById('input-dni-dir').value = '';
+      document.getElementById('results-directivo').innerHTML = '';
+      setAlert('alert-directivo', 'info', '');
+      document.getElementById('btn-buscar-dni-dir').disabled = true;
+      showScreen('screen-directivo');
+      setTimeout(() => document.getElementById('input-dni-dir').focus(), 350);
     } else {
       document.getElementById('input-nombre').value = '';
       document.getElementById('results-veedor').innerHTML = '';
@@ -108,7 +115,8 @@ const App = {
   },
 
   goBack() {
-    if (State.role === 'aplicador') showScreen('screen-aplicador');
+    if (State.role === 'aplicador')  showScreen('screen-aplicador');
+    else if (State.role === 'directivo') showScreen('screen-directivo');
     else                             showScreen('screen-veedor');
   },
 
@@ -119,6 +127,14 @@ const App = {
     document.getElementById('btn-buscar-dni').disabled = val.length < 6;
     document.getElementById('results-aplicador').innerHTML = '';
     setAlert('alert-aplicador', 'info', '');
+  },
+
+  onDniDirInput() {
+    const val = document.getElementById('input-dni-dir').value.replace(/\D/g,'');
+    document.getElementById('input-dni-dir').value = val;
+    document.getElementById('btn-buscar-dni-dir').disabled = val.length < 6;
+    document.getElementById('results-directivo').innerHTML = '';
+    setAlert('alert-directivo', 'info', '');
   },
 
   onNombreInput() {
@@ -158,6 +174,36 @@ const App = {
       // No encontrado → mostrar botón de inscripción
       setAlert('alert-aplicador', 'warning', 'No se encontró ningún aplicador con ese DNI.');
       document.getElementById('results-aplicador').innerHTML = `
+        <button class="btn btn-outlined" onclick="App._mostrarInscripcion({dni:'${dniStr}'})" style="margin-top:4px;">No estoy en la lista — Inscribirme</button>`;
+    }
+  },
+
+  // ── DIRECTIVO: Buscar por DNI ───────────────────────────────
+  async buscarDirectivo() {
+    const dniStr = document.getElementById('input-dni-dir').value.trim();
+    const dni    = parseInt(dniStr, 10);
+    if (!dni || isNaN(dni)) return;
+
+    setLoading('btn-buscar-dni-dir', 'spinner-dni-dir', 'btn-buscar-dni-dir-text', true);
+    setAlert('alert-directivo', 'info', '');
+    document.getElementById('results-directivo').innerHTML = '';
+
+    const persona = DB.directivos.find(p => p.dni === dni);
+    const yaRegistrado = await this._yaRegistrado(dniStr, 'directivo');
+    setLoading('btn-buscar-dni-dir', 'spinner-dni-dir', 'btn-buscar-dni-dir-text', false);
+
+    if (yaRegistrado) {
+      setAlert('alert-directivo', 'warning',
+        'Tu asistencia ya fue registrada hoy. Solo se permite un registro por día.');
+      return;
+    }
+
+    if (persona) {
+      State.persona = persona;
+      this._mostrarConfirmacion(persona);
+    } else {
+      setAlert('alert-directivo', 'warning', 'No se encontró ningún directivo con ese DNI.');
+      document.getElementById('results-directivo').innerHTML = `
         <button class="btn btn-outlined" onclick="App._mostrarInscripcion({dni:'${dniStr}'})" style="margin-top:4px;">No estoy en la lista — Inscribirme</button>`;
     }
   },
@@ -247,8 +293,10 @@ const App = {
   _mostrarConfirmacion(persona) {
     // Chip de rol
     const chip = document.getElementById('chip-confirmar');
-    chip.textContent = State.role === 'aplicador' ? 'Aplicador encontrado' : 'Veedor encontrado';
-    chip.className = 'screen-header-label' + (State.role === 'veedor' ? ' secondary' : '');
+    const labels = { aplicador: 'Aplicador encontrado', veedor: 'Veedor encontrado', directivo: 'Directivo encontrado' };
+    const classes = { aplicador: '', veedor: ' secondary', directivo: ' directivos' };
+    chip.textContent = labels[State.role] || 'Persona encontrada';
+    chip.className = 'screen-header-label' + (classes[State.role] || '');
 
     // Card de persona
     const card = document.getElementById('person-card');
@@ -258,6 +306,12 @@ const App = {
       rows.push(['DNI',    persona.dni]);
       rows.push(['Cargo',  persona.cargo || '—']);
       rows.push(['CUE',    persona.cue]);
+      rows.push(['Turno',  persona.turno || '—']);
+    } else if (State.role === 'directivo') {
+      rows.push(['DNI',    persona.dni]);
+      rows.push(['Cargo',  persona.cargo || '—']);
+      rows.push(['Escuela', persona.escuela || '—']);
+      rows.push(['Nivel',  persona.nivel || '—']);
       rows.push(['Turno',  persona.turno || '—']);
     } else {
       rows.push(['Escuela', persona.escuela_ref || '—']);
@@ -289,7 +343,9 @@ const App = {
 
     const idKey = State.role === 'aplicador'
       ? String(persona.dni)
-      : normalize(persona.apellido_nombre);
+      : State.role === 'directivo'
+        ? String(persona.dni)
+        : normalize(persona.apellido_nombre);
 
     // Doble-check en caso de race condition entre dispositivos
     const yaReg = await this._yaRegistrado(idKey, State.role);
@@ -310,7 +366,8 @@ const App = {
       cue:      persona.cue || '',
       turno:    persona.turno || '',
       cargo:    persona.cargo || '',
-      escuela:  persona.escuela_ref || '',
+      escuela:  persona.escuela_ref || persona.escuela || '',
+      nivel:    persona.nivel || '',
       mail:     persona.mail || '',
       telefono: persona.telefono ? String(persona.telefono) : '',
       esNuevo:  false,
@@ -332,8 +389,10 @@ const App = {
   // ── Mostrar pantalla inscripción ────────────────────────────
   _mostrarInscripcion(prefill = {}) {
     const esAplicador = State.role === 'aplicador';
-    document.getElementById('fields-aplicador').style.display = esAplicador ? '' : 'none';
-    document.getElementById('fields-veedor').style.display    = esAplicador ? 'none' : '';
+    const esDirectivo = State.role === 'directivo';
+    // For directivos we reuse the aplicador fields
+    document.getElementById('fields-aplicador').style.display = (esAplicador || esDirectivo) ? '' : 'none';
+    document.getElementById('fields-veedor').style.display    = (esAplicador || esDirectivo) ? 'none' : '';
 
     if (esAplicador) {
       document.getElementById('insc-dni-ap').value            = prefill.dni || '';
@@ -358,20 +417,21 @@ const App = {
   // ── Inscribir nueva persona ─────────────────────────────────
   async inscribir() {
     const esAplicador = State.role === 'aplicador';
+    const esDirectivo = State.role === 'directivo';
     let record = {};
 
-    if (esAplicador) {
+    if (esAplicador || esDirectivo) {
       const nombre = document.getElementById('insc-apellido-nombre').value.trim();
       const dni    = document.getElementById('insc-dni-ap').value.trim();
       const cue    = document.getElementById('insc-cue-ap').value.trim();
-      if (!nombre || !dni || !cue) {
+      if (!nombre || !dni) {
         setAlert('alert-inscripcion', 'error', 'Completá los campos obligatorios (*)');
         return;
       }
       record = {
         fecha:    hoyISO(),
         hora:     horaLocal(),
-        role:     'aplicador',
+        role:     State.role,
         idKey:    dni,
         apellido_nombre: nombre,
         dni:      parseInt(dni, 10) || null,
@@ -381,14 +441,15 @@ const App = {
         turno:    document.getElementById('insc-turno-ap').value,
         telefono: document.getElementById('insc-telefono-ap').value.trim(),
         escuela:  '',
+        nivel:    '',
         esNuevo:  true,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       };
     } else {
       const nombre = document.getElementById('insc-apellido-nombre-v').value.trim();
       const cue    = document.getElementById('insc-cue-v').value.trim();
-      if (!nombre || !cue) {
-        setAlert('alert-inscripcion', 'error', 'Completá los campos obligatorios (*)');
+      if (!nombre) {
+        setAlert('alert-inscripcion', 'error', 'Completá el nombre y apellido (*)');
         return;
       }
       record = {
@@ -438,8 +499,9 @@ const App = {
     document.getElementById('success-sub').textContent  = esNuevo
       ? 'Inscripto y asistencia registrada'
       : 'Asistencia registrada correctamente';
+    const roleLabel = { aplicador: 'Aplicador', veedor: 'Veedor', directivo: 'Directivo' };
     document.getElementById('success-details').innerHTML =
-      `${record.fecha} · ${record.hora}<br/>${record.role === 'aplicador' ? 'Aplicador' : 'Veedor'}`;
+      `${record.fecha} · ${record.hora}<br/>${roleLabel[record.role] || record.role}`;
 
     // Reiniciar animación del countdown
     const fill = document.getElementById('countdown-fill');
@@ -561,8 +623,11 @@ const App = {
 document.getElementById('input-dni').addEventListener('keydown', e => {
   if (e.key === 'Enter') App.buscarAplicador();
 });
+document.getElementById('input-dni-dir').addEventListener('keydown', e => {
+  if (e.key === 'Enter') App.buscarDirectivo();
+});
 document.getElementById('input-nombre').addEventListener('keydown', e => {
   if (e.key === 'Enter') App.buscarVeedor();
 });
 
-console.log(`[App] DB cargado: ${DB.aplicadores.length} aplicadores, ${DB.veedores.length} veedores`);
+console.log(`[App] DB cargado: ${DB.aplicadores.length} aplicadores, ${DB.veedores.length} veedores, ${DB.directivos.length} directivos`);

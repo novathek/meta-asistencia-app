@@ -88,13 +88,44 @@ for row in ws_ve.iter_rows(min_row=2, values_only=True):
         "cargo_campo":     clean_str(cargo_campo),
     })
 
+# ── DIRECTIVOS ───────────────────────────────────
+ws_di = wb['DIRECTIVOS']
+directivos_dict = {}  # keyed by DNI to deduplicate
+for row in ws_di.iter_rows(min_row=2, values_only=True):
+    if not any(cell is not None for cell in row):
+        continue
+    # CUEANEXO, NIVEL, Nombre(escuela), Ano_Grado, Seccion, Turno,
+    # Localidad_padron, NIVEL2, NOMBRE_APELLIDO, CARGO, DNI, CORREO
+    cue, nivel, escuela, ano_grado, seccion, turno, localidad, nivel2, apellido_nombre, cargo, dni, mail = row
+    dni_int = clean_int(dni)
+    if not dni_int:
+        continue
+    if dni_int not in directivos_dict:   # keep first occurrence only
+        directivos_dict[dni_int] = {
+            "cue":             clean_str(cue),
+            "nivel":           clean_str(nivel),
+            "escuela":         clean_str(escuela),
+            "turno":           clean_str(turno),
+            "localidad":       clean_str(localidad),
+            "apellido_nombre": clean_str(apellido_nombre),
+            "cargo":           clean_str(cargo),
+            "dni":             dni_int,
+            "mail":            clean_str(mail),
+        }
+directivos = list(directivos_dict.values())
+
 data = {
     "aplicadores": aplicadores,
-    "veedores": veedores
+    "veedores": veedores,
+    "directivos": directivos,
 }
 
 json_str = json.dumps(data, ensure_ascii=False, indent=2)
-output = f"// AUTO-GENERATED — do not edit manually\n// Aplicadores: {len(aplicadores)} | Veedores: {len(veedores)}\nconst DB = {json_str};\n"
+output = (
+    f"// AUTO-GENERATED — do not edit manually\n"
+    f"// Aplicadores: {len(aplicadores)} | Veedores: {len(veedores)} | Directivos: {len(directivos)}\n"
+    f"const DB = {json_str};\n"
+)
 
 out_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data.js')
 with open(out_path, 'w', encoding='utf-8') as f:
@@ -103,4 +134,4 @@ with open(out_path, 'w', encoding='utf-8') as f:
 print(f"OK: data.js generado correctamente")
 print(f"   Aplicadores: {len(aplicadores)}")
 print(f"   Veedores:    {len(veedores)}")
-
+print(f"   Directivos:  {len(directivos)}")
