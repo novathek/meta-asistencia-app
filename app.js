@@ -531,6 +531,7 @@ const App = {
     document.getElementById('stat-total').textContent       = '…';
     document.getElementById('stat-aplicadores').textContent = '…';
     document.getElementById('stat-veedores').textContent    = '…';
+    document.getElementById('stat-directivos').textContent  = '…';
 
     if (!db) {
       document.getElementById('stat-total').textContent = '—';
@@ -545,10 +546,12 @@ const App = {
       const total = docs.length;
       const ap    = docs.filter(d => d.role === 'aplicador').length;
       const ve    = docs.filter(d => d.role === 'veedor').length;
+      const di    = docs.filter(d => d.role === 'directivo').length;
 
       document.getElementById('stat-total').textContent       = total;
       document.getElementById('stat-aplicadores').textContent = ap;
       document.getElementById('stat-veedores').textContent    = ve;
+      document.getElementById('stat-directivos').textContent  = di;
     } catch(e) {
       console.error(e);
     }
@@ -604,6 +607,13 @@ const App = {
       if (veRows.length) {
         const wsVe = XLSX.utils.json_to_sheet(veRows);
         XLSX.utils.book_append_sheet(wb, wsVe, 'Veedores');
+      }
+
+      // Directivos sheet
+      const diRows = rows.filter(r => r['Rol'] === 'Directivo');
+      if (diRows.length) {
+        const wsDi = XLSX.utils.json_to_sheet(diRows);
+        XLSX.utils.book_append_sheet(wb, wsDi, 'Directivos');
       }
 
       const fecha = hoyISO();
