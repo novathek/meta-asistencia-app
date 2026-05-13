@@ -22,9 +22,8 @@ const Admin = {
   init() {
     if (!db) return;
     
-    // Escuchar cambios en tiempo real para el día de hoy
+    // Escuchar todos los registros (sin filtro de fecha)
     db.collection('asistencia')
-      .where('fecha', '==', hoyISO())
       .onSnapshot(snap => {
         this.records = [];
         snap.forEach(doc => {
@@ -97,7 +96,7 @@ const Admin = {
               ${r.apellido_nombre} ${badge}
             </div>
             <div class="admin-item-meta">
-              ${r.hora} · ${idInfo}${nuevoTxt}
+              ${r.fecha} · ${r.hora} · ${idInfo}${nuevoTxt}
             </div>
           </div>
           <button class="btn-delete" onclick="Admin.deleteRecord('${r.id}', '${r.apellido_nombre.replace(/'/g,"\\'")}')" title="Eliminar registro">
