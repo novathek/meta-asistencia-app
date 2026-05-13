@@ -60,11 +60,13 @@ const Admin = {
     const ap    = this.records.filter(r => r.role === 'aplicador').length;
     const ve    = this.records.filter(r => r.role === 'veedor').length;
     const di    = this.records.filter(r => r.role === 'directivo').length;
+    const ot    = this.records.filter(r => r.role === 'otro').length;
 
     document.getElementById('stat-total').textContent       = total;
     document.getElementById('stat-aplicadores').textContent = ap;
     document.getElementById('stat-veedores').textContent    = ve;
     document.getElementById('stat-directivos').textContent  = di;
+    document.getElementById('stat-otros').textContent       = ot;
   },
 
   renderList() {
@@ -82,7 +84,7 @@ const Admin = {
     }
 
     container.innerHTML = filteredRecords.map(r => {
-      const roleLabels = { aplicador: 'Aplicador', veedor: 'Veedor', directivo: 'Directivo' };
+      const roleLabels = { aplicador: 'Aplicador', veedor: 'Veedor', directivo: 'Directivo', otro: 'Otro' };
       const badge = `<span class="badge ${r.role}">${roleLabels[r.role] || r.role}</span>`;
       const idInfo = r.role === 'veedor'
         ? `CUE: ${r.cue || 'S/D'}`

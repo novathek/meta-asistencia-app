@@ -110,6 +110,24 @@
             </div>
           </button>
 
+          <button class="role-card otros" id="btn-role-otro" onclick="App.selectRole('otro')">
+            <div class="role-card-leading">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+            </div>
+            <div class="role-card-body">
+              <div class="role-card-title">Otros</div>
+              <div class="role-card-sub">Casos excepcionales — registro directo</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </button>
+
         </div>
 
         <div class="export-row">
@@ -202,6 +220,83 @@
         <button class="btn btn-filled" id="btn-buscar-dni-dir" onclick="App.buscarDirectivo()" disabled>
           <span id="btn-buscar-dni-dir-text">Buscar</span>
           <div class="spinner" id="spinner-dni-dir" style="display:none;"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 1c — OTROS (REGISTRO DIRECTO)
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-otros">
+
+      <div class="top-app-bar">
+        <button class="icon-btn" onclick="App.goHome()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <span class="top-app-bar-title">Caso Excepcional</span>
+      </div>
+
+      <div class="screen-header">
+        <div class="screen-header-label otros">Registro directo</div>
+        <h2 class="screen-title">Completá tus datos</h2>
+        <p class="screen-desc">Para casos no incluidos en la lista</p>
+      </div>
+
+      <div class="scroll-body">
+        <form id="form-otros" autocomplete="off">
+          <div class="text-field">
+            <label class="text-field-label" for="otros-nombre">Apellido y Nombre *</label>
+            <input class="text-field-input" id="otros-nombre" type="text" />
+          </div>
+          <div class="text-field">
+            <label class="text-field-label" for="otros-dni">DNI</label>
+            <input class="text-field-input" id="otros-dni" type="tel" inputmode="numeric" placeholder="Opcional" />
+          </div>
+          <div class="text-field">
+            <label class="text-field-label" for="otros-cargo">Cargo / Rol</label>
+            <input class="text-field-input" id="otros-cargo" type="text" placeholder="Ej: Supervisor, Técnico..." />
+          </div>
+          <div class="text-field">
+            <label class="text-field-label" for="otros-cue">CUE</label>
+            <input class="text-field-input" id="otros-cue" type="text" />
+          </div>
+          <div class="text-field">
+            <label class="text-field-label" for="otros-turno">Turno</label>
+            <select class="text-field-input" id="otros-turno">
+              <option value="">Seleccioná...</option>
+              <option>Mañana</option>
+              <option>Tarde</option>
+              <option>Noche</option>
+              <option>Vespertino</option>
+            </select>
+          </div>
+          <div class="text-field">
+            <label class="text-field-label" for="otros-escuela">Escuela</label>
+            <input class="text-field-input" id="otros-escuela" type="text" />
+          </div>
+          <div class="text-field">
+            <label class="text-field-label" for="otros-mail">E-mail</label>
+            <input class="text-field-input" id="otros-mail" type="email" inputmode="email" />
+          </div>
+          <div class="text-field">
+            <label class="text-field-label" for="otros-telefono">Teléfono</label>
+            <input class="text-field-input" id="otros-telefono" type="tel" inputmode="numeric" />
+          </div>
+        </form>
+        <div id="alert-otros"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-filled" id="btn-inscribir-otro" onclick="App.inscribirOtro()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <span id="btn-inscribir-otro-text">Registrar asistencia</span>
+          <div class="spinner" id="spinner-otros" style="display:none;"></div>
         </button>
       </div>
     </div>

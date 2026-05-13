@@ -99,6 +99,18 @@ const App = {
       document.getElementById('btn-buscar-dni-dir').disabled = true;
       showScreen('screen-directivo');
       setTimeout(() => document.getElementById('input-dni-dir').focus(), 350);
+    } else if (role === 'otro') {
+      document.getElementById('otros-nombre').value = '';
+      document.getElementById('otros-dni').value = '';
+      document.getElementById('otros-cargo').value = '';
+      document.getElementById('otros-cue').value = '';
+      document.getElementById('otros-turno').value = '';
+      document.getElementById('otros-escuela').value = '';
+      document.getElementById('otros-mail').value = '';
+      document.getElementById('otros-telefono').value = '';
+      setAlert('alert-otros', 'info', '');
+      showScreen('screen-otros');
+      setTimeout(() => document.getElementById('otros-nombre').focus(), 350);
     } else {
       document.getElementById('input-nombre').value = '';
       document.getElementById('results-veedor').innerHTML = '';
@@ -499,7 +511,7 @@ const App = {
     document.getElementById('success-sub').textContent  = esNuevo
       ? 'Inscripto y asistencia registrada'
       : 'Asistencia registrada correctamente';
-    const roleLabel = { aplicador: 'Aplicador', veedor: 'Veedor', directivo: 'Directivo' };
+    const roleLabel = { aplicador: 'Aplicador', veedor: 'Veedor', directivo: 'Directivo', otro: 'Otro' };
     document.getElementById('success-details').innerHTML =
       `${record.fecha} · ${record.hora}<br/>${roleLabel[record.role] || record.role}`;
 
@@ -511,6 +523,55 @@ const App = {
 
     showScreen('screen-success');
     setTimeout(() => this.goHome(), 4100);
+  },
+
+  // ── OTROS: Registro directo ─────────────────────────────────
+  async inscribirOtro() {
+    const nombre = document.getElementById('otros-nombre').value.trim();
+    if (!nombre) {
+      setAlert('alert-otros', 'error', 'El nombre y apellido es obligatorio (*)');
+      return;
+    }
+
+    const dniStr = document.getElementById('otros-dni').value.trim();
+    const idKey  = dniStr ? dniStr : normalize(nombre);
+
+    setLoading('btn-inscribir-otro', 'spinner-otros', 'btn-inscribir-otro-text', true);
+
+    const yaReg = await this._yaRegistrado(idKey, 'otro');
+    if (yaReg) {
+      setLoading('btn-inscribir-otro', 'spinner-otros', 'btn-inscribir-otro-text', false);
+      setAlert('alert-otros', 'warning', 'Esta persona ya registró asistencia hoy.');
+      return;
+    }
+
+    const record = {
+      fecha:    hoyISO(),
+      hora:     horaLocal(),
+      role:     'otro',
+      idKey,
+      apellido_nombre: nombre,
+      dni:      parseInt(dniStr, 10) || null,
+      cue:      document.getElementById('otros-cue').value.trim(),
+      turno:    document.getElementById('otros-turno').value,
+      escuela:  document.getElementById('otros-escuela').value.trim(),
+      cargo:    document.getElementById('otros-cargo').value.trim(),
+      mail:     document.getElementById('otros-mail').value.trim(),
+      telefono: document.getElementById('otros-telefono').value.trim(),
+      nivel:    '',
+      esNuevo:  true,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    try {
+      if (db) await db.collection('asistencia').add(record);
+      setLoading('btn-inscribir-otro', 'spinner-otros', 'btn-inscribir-otro-text', false);
+      this._mostrarExito(record.apellido_nombre, record, false);
+    } catch(e) {
+      setLoading('btn-inscribir-otro', 'spinner-otros', 'btn-inscribir-otro-text', false);
+      setAlert('alert-otros', 'error', 'Error al guardar. Verificá la conexión e intentá de nuevo.');
+      console.error(e);
+    }
   },
 
   // ── Admin / Export ──────────────────────────────────────────
@@ -532,6 +593,7 @@ const App = {
     document.getElementById('stat-aplicadores').textContent = '…';
     document.getElementById('stat-veedores').textContent    = '…';
     document.getElementById('stat-directivos').textContent  = '…';
+    document.getElementById('stat-otros').textContent       = '…';
 
     if (!db) {
       document.getElementById('stat-total').textContent = '—';
@@ -547,11 +609,13 @@ const App = {
       const ap    = docs.filter(d => d.role === 'aplicador').length;
       const ve    = docs.filter(d => d.role === 'veedor').length;
       const di    = docs.filter(d => d.role === 'directivo').length;
+      const ot    = docs.filter(d => d.role === 'otro').length;
 
       document.getElementById('stat-total').textContent       = total;
       document.getElementById('stat-aplicadores').textContent = ap;
       document.getElementById('stat-veedores').textContent    = ve;
       document.getElementById('stat-directivos').textContent  = di;
+      document.getElementById('stat-otros').textContent       = ot;
     } catch(e) {
       console.error(e);
     }
@@ -614,6 +678,13 @@ const App = {
       if (diRows.length) {
         const wsDi = XLSX.utils.json_to_sheet(diRows);
         XLSX.utils.book_append_sheet(wb, wsDi, 'Directivos');
+      }
+
+      // Otros sheet
+      const otRows = rows.filter(r => r['Rol'] === 'Otro');
+      if (otRows.length) {
+        const wsOt = XLSX.utils.json_to_sheet(otRows);
+        XLSX.utils.book_append_sheet(wb, wsOt, 'Otros');
       }
 
       const fecha = hoyISO();

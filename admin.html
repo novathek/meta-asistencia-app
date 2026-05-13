@@ -69,6 +69,7 @@
     .badge.aplicador { background: var(--md-primary-container); color: var(--md-primary); }
     .badge.veedor    { background: var(--md-secondary-container); color: var(--md-secondary); }
     .badge.directivo { background: #FEF3C7; color: #92400E; }
+    .badge.otro      { background: #EDE9FE; color: #6D28D9; }
     
     .btn-delete {
       background: var(--md-error-container);
@@ -149,6 +150,10 @@
       <div class="stat-num" id="stat-directivos" style="color:#D97706">—</div>
       <div class="stat-label">Directivos</div>
     </div>
+    <div class="stat-card" style="grid-column: 1 / -1;">
+      <div class="stat-num" id="stat-otros" style="color:#7C3AED">—</div>
+      <div class="stat-label">Otros</div>
+    </div>
   </div>
 
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
@@ -160,6 +165,7 @@
     <button class="filter-chip" id="filter-aplicador" onclick="Admin.setFilter('aplicador')">Aplicadores</button>
     <button class="filter-chip" id="filter-veedor" onclick="Admin.setFilter('veedor')">Veedores</button>
     <button class="filter-chip" id="filter-directivo" onclick="Admin.setFilter('directivo')">Directivos</button>
+    <button class="filter-chip" id="filter-otro" onclick="Admin.setFilter('otro')">Otros</button>
   </div>
 
   <div class="admin-list" id="admin-list">

@@ -280,6 +280,12 @@ body {
 }
 .role-card.directivos .role-card-title    { color: #92400E; }
 .role-card.directivos .role-card-trailing { color: #D97706; }
+.role-card.otros .role-card-leading {
+  background: #EDE9FE;
+  color: #6D28D9;
+}
+.role-card.otros .role-card-title    { color: #6D28D9; }
+.role-card.otros .role-card-trailing { color: #7C3AED; }
 
 .role-card-body { flex: 1; }
 
@@ -330,6 +336,10 @@ body {
 .screen-header-label.directivos {
   background: #FEF3C7;
   color: #92400E;
+}
+.screen-header-label.otros {
+  background: #EDE9FE;
+  color: #6D28D9;
 }
 
 .screen-title {
