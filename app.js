@@ -61,14 +61,9 @@ function showScreen(id) {
 
 // ── Alertas ─────────────────────────────────────────────────────
 function setAlert(containerId, type, msg) {
-  const icons = { error: '❌', warning: '⚠️', success: '✅', info: 'ℹ️' };
   const el = document.getElementById(containerId);
   if (!msg) { el.innerHTML = ''; return; }
-  el.innerHTML = `
-    <div class="alert ${type}">
-      <span class="alert-icon">${icons[type]||'ℹ️'}</span>
-      <span>${msg}</span>
-    </div>`;
+  el.innerHTML = `<div class="alert ${type}">${msg}</div>`;
 }
 
 // ── Spinners ─────────────────────────────────────────────────────
@@ -92,6 +87,7 @@ const App = {
     State.persona = null;
     if (role === 'aplicador') {
       document.getElementById('input-dni').value = '';
+      document.getElementById('results-aplicador').innerHTML = '';
       setAlert('alert-aplicador', 'info', '');
       document.getElementById('btn-buscar-dni').disabled = true;
       showScreen('screen-aplicador');
@@ -121,6 +117,7 @@ const App = {
     const val = document.getElementById('input-dni').value.replace(/\D/g,'');
     document.getElementById('input-dni').value = val;
     document.getElementById('btn-buscar-dni').disabled = val.length < 6;
+    document.getElementById('results-aplicador').innerHTML = '';
     setAlert('alert-aplicador', 'info', '');
   },
 
@@ -139,6 +136,7 @@ const App = {
 
     setLoading('btn-buscar-dni', 'spinner-dni', 'btn-buscar-dni-text', true);
     setAlert('alert-aplicador', 'info', '');
+    document.getElementById('results-aplicador').innerHTML = '';
 
     // Buscar en DB local
     const persona = DB.aplicadores.find(p => p.dni === dni);
@@ -149,7 +147,7 @@ const App = {
 
     if (yaRegistrado) {
       setAlert('alert-aplicador', 'warning',
-        '⚠️ Tu asistencia ya fue registrada hoy. Solo se permite un registro por día.');
+        'Tu asistencia ya fue registrada hoy. Solo se permite un registro por día.');
       return;
     }
 
@@ -157,8 +155,10 @@ const App = {
       State.persona = persona;
       this._mostrarConfirmacion(persona);
     } else {
-      // No encontrado → inscripción
-      this._mostrarInscripcion({ dni: dniStr });
+      // No encontrado → mostrar botón de inscripción
+      setAlert('alert-aplicador', 'warning', 'No se encontró ningún aplicador con ese DNI.');
+      document.getElementById('results-aplicador').innerHTML = `
+        <button class="btn btn-outlined" onclick="App._mostrarInscripcion({dni:'${dniStr}'})" style="margin-top:4px;">No estoy en la lista — Inscribirme</button>`;
     }
   },
 
@@ -179,9 +179,7 @@ const App = {
       setAlert('alert-veedor', 'warning', 'No se encontró ningún veedor con ese nombre.');
       // Botón para inscribir
       document.getElementById('results-veedor').innerHTML = `
-        <button class="btn btn-outline" onclick="App._mostrarInscripcion({nombre:'${query.replace(/'/g,"\\'")}'})" style="margin-top:4px;">
-          ➕ No estoy en la lista — Inscribirme
-        </button>`;
+        <button class="btn btn-outlined" onclick="App._mostrarInscripcion({nombre:'${query.replace(/'/g,"\\'")}'})" style="margin-top:4px;">No estoy en la lista — Inscribirme</button>`;
       return;
     }
 
@@ -190,7 +188,7 @@ const App = {
       const yaRegistrado = await this._yaRegistrado(normalize(resultados[0].apellido_nombre), 'veedor');
       if (yaRegistrado) {
         setAlert('alert-veedor', 'warning',
-          '⚠️ Tu asistencia ya fue registrada hoy. Solo se permite un registro por día.');
+          'Tu asistencia ya fue registrada hoy. Solo se permite un registro por día.');
         return;
       }
       State.persona = resultados[0];
@@ -220,7 +218,7 @@ const App = {
     const yaRegistrado = await this._yaRegistrado(normalize(v.apellido_nombre), 'veedor');
     if (yaRegistrado) {
       setAlert('alert-veedor', 'warning',
-        '⚠️ Tu asistencia ya fue registrada hoy. Solo se permite un registro por día.');
+        'Tu asistencia ya fue registrada hoy. Solo se permite un registro por día.');
       return;
     }
     State.persona = v;
@@ -249,8 +247,8 @@ const App = {
   _mostrarConfirmacion(persona) {
     // Chip de rol
     const chip = document.getElementById('chip-confirmar');
-    chip.textContent = State.role === 'aplicador' ? '🧑‍🏫 Aplicador encontrado' : '👁️ Veedor encontrado';
-    chip.className = 'chip' + (State.role === 'veedor' ? ' veedor' : '');
+    chip.textContent = State.role === 'aplicador' ? 'Aplicador encontrado' : 'Veedor encontrado';
+    chip.className = 'screen-header-label' + (State.role === 'veedor' ? ' secondary' : '');
 
     // Card de persona
     const card = document.getElementById('person-card');
@@ -298,7 +296,7 @@ const App = {
     if (yaReg) {
       setLoading('btn-confirmar', 'spinner-confirmar', 'btn-confirmar-text', false);
       setAlert('alert-confirmar', 'warning',
-        '⚠️ La asistencia ya fue registrada hoy desde otro dispositivo.');
+        'La asistencia ya fue registrada hoy desde otro dispositivo.');
       return;
     }
 
@@ -418,7 +416,7 @@ const App = {
     if (yaReg) {
       setLoading('btn-inscribir', 'spinner-inscribir', 'btn-inscribir-text', false);
       setAlert('alert-inscripcion', 'warning',
-        '⚠️ Esta persona ya registró asistencia hoy.');
+        'Esta persona ya registró asistencia hoy.');
       return;
     }
 
@@ -438,8 +436,8 @@ const App = {
   _mostrarExito(nombre, record, esNuevo = false) {
     document.getElementById('success-name').textContent = nombre;
     document.getElementById('success-sub').textContent  = esNuevo
-      ? '✅ Inscripto y asistencia registrada'
-      : '✅ Asistencia registrada correctamente';
+      ? 'Inscripto y asistencia registrada'
+      : 'Asistencia registrada correctamente';
     document.getElementById('success-details').innerHTML =
       `${record.fecha} · ${record.hora}<br/>${record.role === 'aplicador' ? 'Aplicador' : 'Veedor'}`;
 
