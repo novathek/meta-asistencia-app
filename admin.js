@@ -141,19 +141,21 @@ const Admin = {
         return 0;
       });
 
+      const rolLabels = { aplicador: 'Aplicador', veedor: 'Veedor', directivo: 'Directivo', otro: 'Otro' };
       const rows = sortedRecords.map(data => ({
-        'Fecha':           data.fecha || '',
-        'Hora':            data.hora  || '',
-        'Rol':             data.role === 'aplicador' ? 'Aplicador' : 'Veedor',
+        'Fecha':             data.fecha || '',
+        'Hora':              data.hora  || '',
+        'Rol':               rolLabels[data.role] || data.role || '',
         'Apellido y Nombre': data.apellido_nombre || '',
-        'DNI':             data.dni || '',
-        'CUE':             data.cue || '',
-        'Turno':           data.turno || '',
-        'Cargo':           data.cargo || '',
-        'Escuela':         data.escuela || '',
-        'Mail':            data.mail || '',
-        'Teléfono':        data.telefono || '',
-        'Es nuevo':        data.esNuevo ? 'SÍ' : 'NO',
+        'DNI':               data.dni || '',
+        'CUE':               data.cue || '',
+        'Turno':             data.turno || '',
+        'Cargo':             data.cargo || '',
+        'Nivel':             data.nivel || '',
+        'Escuela':           data.escuela || '',
+        'Mail':              data.mail || '',
+        'Teléfono':          data.telefono || '',
+        'Es nuevo':          data.esNuevo ? 'SÍ' : 'NO',
       }));
 
       const ws = XLSX.utils.json_to_sheet(rows);
@@ -172,6 +174,20 @@ const Admin = {
       if (veRows.length) {
         const wsVe = XLSX.utils.json_to_sheet(veRows);
         XLSX.utils.book_append_sheet(wb, wsVe, 'Veedores');
+      }
+
+      // Directivos sheet
+      const diRows = rows.filter(r => r['Rol'] === 'Directivo');
+      if (diRows.length) {
+        const wsDi = XLSX.utils.json_to_sheet(diRows);
+        XLSX.utils.book_append_sheet(wb, wsDi, 'Directivos');
+      }
+
+      // Otros sheet
+      const otRows = rows.filter(r => r['Rol'] === 'Otro');
+      if (otRows.length) {
+        const wsOt = XLSX.utils.json_to_sheet(otRows);
+        XLSX.utils.book_append_sheet(wb, wsOt, 'Otros');
       }
 
       const fecha = hoyISO();

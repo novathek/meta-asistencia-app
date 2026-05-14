@@ -248,6 +248,16 @@
       <div class="scroll-body">
         <form id="form-otros" autocomplete="off">
           <div class="text-field">
+            <label class="text-field-label" for="otros-rol">¿Sos Aplicador, Veedor o Directivo? *</label>
+            <select class="text-field-input" id="otros-rol">
+              <option value="">Seleccioná tu rol...</option>
+              <option value="aplicador">Aplicador</option>
+              <option value="veedor">Veedor</option>
+              <option value="directivo">Directivo</option>
+              <option value="otro">Otro (caso excepcional)</option>
+            </select>
+          </div>
+          <div class="text-field">
             <label class="text-field-label" for="otros-nombre">Apellido y Nombre *</label>
             <input class="text-field-input" id="otros-nombre" type="text" />
           </div>
@@ -535,8 +545,7 @@
           </svg>
         </button>
       </div>
-      <div class="modal-sub">Registros del día de hoy</div>
-
+      <div class="modal-sub">Total de registros acumulados</div>
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-num" id="stat-total">—</div>
@@ -550,9 +559,13 @@
           <div class="stat-num" id="stat-veedores" style="color:var(--md-secondary)">—</div>
           <div class="stat-label">Veedores</div>
         </div>
-        <div class="stat-card" style="grid-column: 1 / -1;">
+        <div class="stat-card">
           <div class="stat-num" id="stat-directivos" style="color:#D97706">—</div>
           <div class="stat-label">Directivos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-otros" style="color:#6B7280">—</div>
+          <div class="stat-label">Otros</div>
         </div>
       </div>
 

@@ -100,14 +100,15 @@ const App = {
       showScreen('screen-directivo');
       setTimeout(() => document.getElementById('input-dni-dir').focus(), 350);
     } else if (role === 'otro') {
-      document.getElementById('otros-nombre').value = '';
-      document.getElementById('otros-dni').value = '';
-      document.getElementById('otros-cargo').value = '';
-      document.getElementById('otros-cue').value = '';
-      document.getElementById('otros-turno').value = '';
+      document.getElementById('otros-rol').value     = '';
+      document.getElementById('otros-nombre').value  = '';
+      document.getElementById('otros-dni').value     = '';
+      document.getElementById('otros-cargo').value   = '';
+      document.getElementById('otros-cue').value     = '';
+      document.getElementById('otros-turno').value   = '';
       document.getElementById('otros-escuela').value = '';
-      document.getElementById('otros-mail').value = '';
-      document.getElementById('otros-telefono').value = '';
+      document.getElementById('otros-mail').value    = '';
+      document.getElementById('otros-telefono').value= '';
       setAlert('alert-otros', 'info', '');
       showScreen('screen-otros');
       setTimeout(() => document.getElementById('otros-nombre').focus(), 350);
@@ -186,7 +187,7 @@ const App = {
       // No encontrado → mostrar botón de inscripción
       setAlert('alert-aplicador', 'warning', 'No se encontró ningún aplicador con ese DNI.');
       document.getElementById('results-aplicador').innerHTML = `
-        <button class="btn btn-outlined" onclick="App._mostrarInscripcion({dni:'${dniStr}'})" style="margin-top:4px;">No estoy en la lista — Inscribirme</button>`;
+        <button class="btn btn-outlined" onclick="App._irACasoExcepcional({rol:'aplicador',dni:'${dniStr}'})" style="margin-top:4px;">No estoy en la lista — Registrarme aquí</button>`;
     }
   },
 
@@ -216,7 +217,7 @@ const App = {
     } else {
       setAlert('alert-directivo', 'warning', 'No se encontró ningún directivo con ese DNI.');
       document.getElementById('results-directivo').innerHTML = `
-        <button class="btn btn-outlined" onclick="App._mostrarInscripcion({dni:'${dniStr}'})" style="margin-top:4px;">No estoy en la lista — Inscribirme</button>`;
+        <button class="btn btn-outlined" onclick="App._irACasoExcepcional({rol:'directivo',dni:'${dniStr}'})" style="margin-top:4px;">No estoy en la lista — Registrarme aquí</button>`;
     }
   },
 
@@ -235,9 +236,9 @@ const App = {
 
     if (resultados.length === 0) {
       setAlert('alert-veedor', 'warning', 'No se encontró ningún veedor con ese nombre.');
-      // Botón para inscribir
+      // Botón para caso excepcional
       document.getElementById('results-veedor').innerHTML = `
-        <button class="btn btn-outlined" onclick="App._mostrarInscripcion({nombre:'${query.replace(/'/g,"\\'")}'})" style="margin-top:4px;">No estoy en la lista — Inscribirme</button>`;
+        <button class="btn btn-outlined" onclick="App._irACasoExcepcional({rol:'veedor',nombre:'${query.replace(/'/g,"\\'")}'})" style="margin-top:4px;">No estoy en la lista — Registrarme aquí</button>`;
       return;
     }
 
@@ -525,20 +526,50 @@ const App = {
     setTimeout(() => this.goHome(), 4100);
   },
 
+  // ── Ir a pantalla Caso Excepcional desde otro rol ────────────
+  _irACasoExcepcional({ rol = '', dni = '', nombre = '' } = {}) {
+    document.getElementById('otros-rol').value      = rol;
+    document.getElementById('otros-nombre').value   = nombre;
+    document.getElementById('otros-dni').value      = dni;
+    document.getElementById('otros-cargo').value    = '';
+    document.getElementById('otros-cue').value      = '';
+    document.getElementById('otros-turno').value    = '';
+    document.getElementById('otros-escuela').value  = '';
+    document.getElementById('otros-mail').value     = '';
+    document.getElementById('otros-telefono').value = '';
+    setAlert('alert-otros', 'info', '');
+    State.role = 'otro';
+    showScreen('screen-otros');
+    // Foco al primer campo vacío
+    setTimeout(() => {
+      const foco = nombre ? document.getElementById('otros-cargo') : document.getElementById('otros-nombre');
+      foco.focus();
+    }, 350);
+  },
+
   // ── OTROS: Registro directo ─────────────────────────────────
   async inscribirOtro() {
+    const rolSeleccionado = document.getElementById('otros-rol').value;
     const nombre = document.getElementById('otros-nombre').value.trim();
+
+    if (!rolSeleccionado) {
+      setAlert('alert-otros', 'error', 'Seleccioná tu rol para continuar (*)');
+      return;
+    }
     if (!nombre) {
       setAlert('alert-otros', 'error', 'El nombre y apellido es obligatorio (*)');
       return;
     }
 
     const dniStr = document.getElementById('otros-dni').value.trim();
-    const idKey  = dniStr ? dniStr : normalize(nombre);
+    // El idKey depende del rol: aplicador/directivo usan DNI, veedor usa nombre
+    const idKey = (rolSeleccionado === 'veedor')
+      ? normalize(nombre)
+      : (dniStr ? dniStr : normalize(nombre));
 
     setLoading('btn-inscribir-otro', 'spinner-otros', 'btn-inscribir-otro-text', true);
 
-    const yaReg = await this._yaRegistrado(idKey, 'otro');
+    const yaReg = await this._yaRegistrado(idKey, rolSeleccionado);
     if (yaReg) {
       setLoading('btn-inscribir-otro', 'spinner-otros', 'btn-inscribir-otro-text', false);
       setAlert('alert-otros', 'warning', 'Esta persona ya registró asistencia hoy.');
@@ -548,7 +579,7 @@ const App = {
     const record = {
       fecha:    hoyISO(),
       hora:     horaLocal(),
-      role:     'otro',
+      role:     rolSeleccionado,
       idKey,
       apellido_nombre: nombre,
       dni:      parseInt(dniStr, 10) || null,
@@ -566,7 +597,7 @@ const App = {
     try {
       if (db) await db.collection('asistencia').add(record);
       setLoading('btn-inscribir-otro', 'spinner-otros', 'btn-inscribir-otro-text', false);
-      this._mostrarExito(record.apellido_nombre, record, false);
+      this._mostrarExito(record.apellido_nombre, record, true);
     } catch(e) {
       setLoading('btn-inscribir-otro', 'spinner-otros', 'btn-inscribir-otro-text', false);
       setAlert('alert-otros', 'error', 'Error al guardar. Verificá la conexión e intentá de nuevo.');
@@ -601,9 +632,7 @@ const App = {
     }
 
     try {
-      const snap = await db.collection('asistencia')
-        .where('fecha', '==', hoyISO())
-        .get();
+      const snap = await db.collection('asistencia').get();
       const docs = snap.docs.map(d => d.data());
       const total = docs.length;
       const ap    = docs.filter(d => d.role === 'aplicador').length;
@@ -630,21 +659,23 @@ const App = {
       if (!db) throw new Error('Firebase no configurado');
 
       const snap = await db.collection('asistencia').orderBy('fecha').get();
+      const rolLabels = { aplicador: 'Aplicador', veedor: 'Veedor', directivo: 'Directivo', otro: 'Otro' };
       const rows = snap.docs.map(d => {
         const data = d.data();
         return {
-          'Fecha':           data.fecha || '',
-          'Hora':            data.hora  || '',
-          'Rol':             data.role === 'aplicador' ? 'Aplicador' : 'Veedor',
+          'Fecha':             data.fecha || '',
+          'Hora':              data.hora  || '',
+          'Rol':               rolLabels[data.role] || data.role || '',
           'Apellido y Nombre': data.apellido_nombre || '',
-          'DNI':             data.dni || '',
-          'CUE':             data.cue || '',
-          'Turno':           data.turno || '',
-          'Cargo':           data.cargo || '',
-          'Escuela':         data.escuela || '',
-          'Mail':            data.mail || '',
-          'Teléfono':        data.telefono || '',
-          'Es nuevo':        data.esNuevo ? 'SÍ' : 'NO',
+          'DNI':               data.dni || '',
+          'CUE':               data.cue || '',
+          'Turno':             data.turno || '',
+          'Cargo':             data.cargo || '',
+          'Nivel':             data.nivel || '',
+          'Escuela':           data.escuela || '',
+          'Mail':              data.mail || '',
+          'Teléfono':          data.telefono || '',
+          'Es nuevo':          data.esNuevo ? 'SÍ' : 'NO',
         };
       });
 
