@@ -608,6 +608,7 @@ const App = {
   // ── Admin / Export ──────────────────────────────────────────
   openAdmin() {
     this._refreshStats();
+    this._loadVerificaciones();
     document.getElementById('modal-admin').classList.add('open');
   },
 
@@ -646,6 +647,70 @@ const App = {
       document.getElementById('stat-directivos').textContent  = di;
       document.getElementById('stat-otros').textContent       = ot;
     } catch(e) {
+      console.error(e);
+    }
+  },
+
+  // ── Cargar verificaciones de hoy en el panel admin ─────────
+  async _loadVerificaciones() {
+    const el = document.getElementById('verif-list');
+    if (!el) return;
+    if (!db) {
+      el.innerHTML = '<div style="padding:12px;text-align:center;font-size:.85rem;color:#DC2626;">Firebase no disponible</div>';
+      return;
+    }
+    try {
+      const hoy = hoyISO();
+      const snap = await db.collection('verificacion').where('fecha', '==', hoy).get();
+      if (snap.empty) {
+        el.innerHTML = '<div style="padding:12px;text-align:center;font-size:.85rem;color:var(--md-on-surface-var);">Sin verificaciones registradas hoy</div>';
+        return;
+      }
+      // Sort by hora client-side
+      const docs = snap.docs.sort((a,b) => (b.data().hora||'').localeCompare(a.data().hora||''));
+      el.innerHTML = docs.map(doc => {
+        const d = doc.data();
+        const safe = (d.apellido_nombre||'').replace(/'/g, "\\'");
+        return `<div class="verif-item" id="vi-${doc.id}">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:.83rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.apellido_nombre||'—'}</div>
+            <div style="font-size:.72rem;color:var(--md-on-surface-var);">D\u00eda ${d.dia||'?'} \u00b7 ${d.rol||d.role||'—'} \u00b7 ${d.hora||'—'}</div>
+          </div>
+          <button class="icon-btn" style="width:36px;height:36px;color:#DC2626;flex-shrink:0;"
+            onclick="App._deleteVerificacion('${doc.id}','${safe}')" title="Revertir">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14H6L5 6"/>
+              <path d="M10 11v6"/><path d="M14 11v6"/>
+            </svg>
+          </button>
+        </div>`;
+      }).join('');
+    } catch(e) {
+      el.innerHTML = '<div style="padding:12px;text-align:center;font-size:.85rem;color:#DC2626;">Error al cargar. Verific\u00e1 los permisos de Firebase.</div>';
+      console.error('[verif]', e);
+    }
+  },
+
+  // ── Revertir una verificación accidental ─────────────────
+  async _deleteVerificacion(docId, nombre) {
+    if (!confirm('\u00bfRevertir la verificaci\u00f3n de ' + nombre + '?')) return;
+    try {
+      if (db) await db.collection('verificacion').doc(docId).delete();
+      // Limpiar estado local para que el badge se actualice
+      if (window._verificadosNombres && nombre) {
+        const nom = normalize(nombre);
+        window._verificadosNombres.delete(nom);
+      }
+      // Recargar la lista del panel
+      this._loadVerificaciones();
+      // Re-renderizar lista de escuela si est\u00e1 abierta
+      const listaScreen = document.getElementById('screen-lista');
+      if (listaScreen && listaScreen.classList.contains('active') && typeof renderLista === 'function') {
+        renderLista(window._listaPersonasFiltered || window._listaPersonas || []);
+      }
+    } catch(e) {
+      alert('Error al revertir: ' + e.message);
       console.error(e);
     }
   },

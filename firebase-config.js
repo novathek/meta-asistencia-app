@@ -3,10 +3,10 @@
 //  Instrucciones: ver README.md
 // ─────────────────────────────────────────────────────────────
 const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyCnyDm5d7ylwSEuTVmhEap0LqkCAyxOQl4",
-  authDomain: "meta-asistencia.firebaseapp.com",
-  projectId: "meta-asistencia",
-  storageBucket: "meta-asistencia.firebasestorage.app",
-  messagingSenderId: "442710608349",
-  appId: "1:442710608349:web:3f1e856f2ade9c13acce34D"
+  apiKey: "AIzaSyCwV4TbTbH0R9q6CxZCCB1c-KUjINBqvo8",
+  authDomain: "meta-aplicadores.firebaseapp.com",
+  projectId: "meta-aplicadores",
+  storageBucket: "meta-aplicadores.firebasestorage.app",
+  messagingSenderId: "165173111774",
+  appId: "1:165173111774:web:ba691e703e77d157d24b4f"
 };

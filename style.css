@@ -730,6 +730,32 @@ select.text-field-input {
   padding-right: 42px;
 }
 
+/* ── Semana card ─────────────────────────────────── */
+.role-card.semana .role-card-leading {
+  background: #E0F2FE;
+  color: #0369A1;
+}
+.role-card.semana .role-card-title    { color: #0369A1; }
+.role-card.semana .role-card-trailing { color: #0284C7; }
+
+/* ── Día card ────────────────────────────────────── */
+.role-card.dia .role-card-leading.dia-badge {
+  background: var(--md-primary-container);
+  color: var(--md-primary);
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: 0;
+}
+.role-card.dia .role-card-title    { color: var(--md-primary); }
+.role-card.dia .role-card-trailing { color: var(--md-primary); }
+
+/* ── Screen header label semana ──────────────────── */
+.screen-header-label.semana {
+  background: #E0F2FE;
+  color: #0369A1;
+}
+
 /* ── Landscape tweaks ────────────────────────────── */
 @media (max-height: 600px) {
   .hero-header  { padding: 20px 24px 18px; }

@@ -9,6 +9,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="description" content="Web App de asistencia para el operativo de capacitación META Catamarca." />
 
+  <!-- PWA Settings -->
+  <meta name="theme-color" content="#1A56DB" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192x192.png" />
+
   <!-- Favicon (SVG Data URL) -->
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%231A56DB%22/><path d=%22M28 52 L42 66 L72 34%22 fill=%22none%22 stroke=%22white%22 stroke-width=%2210%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
@@ -31,6 +36,8 @@
 
   <title>META · Asistencia de Capacitación</title>
   <link rel="stylesheet" href="style.css" />
+
+
 </head>
 
 <body>
@@ -47,11 +54,31 @@
       </div>
 
       <div class="screen-content">
-        <p class="section-label" style="margin-top:20px;">Seleccioná tu rol para continuar</p>
+        <p class="section-label" style="margin-top:20px;">Seleccioná una semana</p>
 
         <div class="role-cards">
 
-          <button class="role-card aplicadores" id="btn-role-aplicador" onclick="App.selectRole('aplicador')">
+          <!-- ══ SEMANA 1 ══ -->
+          <button class="role-card semana" id="btn-semana-1" onclick="goSemana(1)">
+            <div class="role-card-leading">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+              </svg>
+            </div>
+            <div class="role-card-body">
+              <div class="role-card-title">Semana 1</div>
+              <div class="role-card-sub">5 días de capacitación</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </button>
+
+
+
+          <button class="role-card aplicadores" id="btn-role-aplicador" onclick="App.selectRole('aplicador')" style="display:none;">
             <div class="role-card-leading">
               <!-- Person icon -->
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -71,7 +98,7 @@
             </div>
           </button>
 
-          <button class="role-card veedores" id="btn-role-veedor" onclick="App.selectRole('veedor')">
+          <button class="role-card veedores" id="btn-role-veedor" onclick="App.selectRole('veedor')" style="display:none;">
             <div class="role-card-leading">
               <!-- Visibility icon -->
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -91,7 +118,7 @@
             </div>
           </button>
 
-          <button class="role-card directivos" id="btn-role-directivo" onclick="App.selectRole('directivo')">
+          <button class="role-card directivos" id="btn-role-directivo" onclick="App.selectRole('directivo')" style="display:none;">
             <div class="role-card-leading">
               <!-- Star/admin icon -->
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -117,7 +144,7 @@
               </svg>
             </div>
             <div class="role-card-body">
-              <div class="role-card-title">Otros</div>
+              <div class="role-card-title">Registro directo</div>
               <div class="role-card-sub">Casos excepcionales — registro directo</div>
             </div>
             <div class="role-card-trailing">
@@ -141,6 +168,131 @@
             Exportar asistencia
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+       SCREEN S1 — DÍAS SEMANA 1
+  ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-semana-1">
+
+      <div class="top-app-bar">
+        <button class="icon-btn" onclick="App.goHome()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <span class="top-app-bar-title">Semana 1</span>
+      </div>
+
+      <div class="screen-header">
+        <div class="screen-header-label semana">5 días disponibles</div>
+        <h2 class="screen-title">Seleccioná el día</h2>
+        <p class="screen-desc">Elegí el día para registrar tu asistencia</p>
+      </div>
+
+      <div class="screen-content" style="padding-top:0;">
+        <div class="role-cards">
+
+          <button class="role-card dia" id="btn-dia-1" onclick="selectDay(1,1)">
+            <div class="role-card-leading dia-badge">1</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 1</div>
+              <div class="role-card-sub">ESCUELA N° 162 "9 DE JULIO" · PRIMARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-2" onclick="selectDay(1,2)">
+            <div class="role-card-leading dia-badge">2</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 2</div>
+              <div class="role-card-sub">EPET N°7 "ING. JOSE ALSINA ALCOBERT" · SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-3" onclick="selectDay(1,3)">
+            <div class="role-card-leading dia-badge">3</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 3</div>
+              <div class="role-card-sub">EPET Nº6 "MAESTRO MARIANO FERNANDO PIERI" · SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-4" onclick="selectDay(1,4)">
+            <div class="role-card-leading dia-badge">4</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 4</div>
+              <div class="role-card-sub">ESC. DE MINERÍA "DR. BERNARDO HOUSSAY" · SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-5" onclick="selectDay(1,5)">
+            <div class="role-card-leading dia-badge">5</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 5</div>
+              <div class="role-card-sub">ESCUELA SECUNDARIA N°49 · SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+       SCREEN LISTA — PERSONAS DE LA ESCUELA
+  ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-lista">
+
+      <div class="top-app-bar">
+        <button class="icon-btn" onclick="goBackFromLista()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <span class="top-app-bar-title" id="lista-titulo">Día</span>
+      </div>
+
+      <div class="screen-header">
+        <div class="screen-header-label semana" id="lista-chip">Cargando...</div>
+        <h2 class="screen-title" id="lista-escuela">—</h2>
+        <p class="screen-desc">Tocá tu nombre para confirmar asistencia</p>
+      </div>
+
+      <div id="alert-lista" style="margin: 0 16px 8px;"></div>
+
+      <div id="lista-container" class="results-list"
+        style="flex:1;overflow-y:auto;margin-bottom:0;padding-bottom:8px;"></div>
+
+      <div class="btn-row">
+        <button class="btn btn-outlined" id="btn-lista-directo" onclick="registroDirectoDesdeLista()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          No estoy en la lista — Registro directo
+        </button>
       </div>
     </div>
 
@@ -570,27 +722,372 @@
       </div>
 
       <div style="display:flex;flex-direction:column;gap:10px;">
-        <button class="btn btn-filled" id="btn-export-excel" onclick="App.exportExcel()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          Exportar a Excel
-        </button>
+
+        <!-- Verificaciones de hoy -->
+        <div style="margin-bottom:2px;">
+          <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--md-on-surface-var);margin-bottom:6px;">
+            Verificaciones de hoy
+          </div>
+          <div id="verif-list"
+            style="max-height:200px;overflow-y:auto;border:1px solid var(--md-outline-var);border-radius:12px;background:var(--md-surface-variant);">
+            <div style="padding:12px;text-align:center;font-size:.85rem;color:var(--md-on-surface-var);">
+              Cargando...
+            </div>
+          </div>
+        </div>
+
         <button class="btn btn-outlined" onclick="App.closeAdmin()">Cerrar</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Confirmar Práctica -->
+  <div class="modal-overlay" id="modal-confirmar-practica">
+    <div class="modal-sheet" style="text-align:center; padding:32px 24px 40px;">
+      <div style="background:var(--md-success-container); color:var(--md-success); width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 style="margin:0 0 8px; font-size:1.25rem; font-weight:700; color:var(--md-on-surface);">Confirmar Asistencia</h3>
+      <p style="margin:0 0 24px; font-size:0.95rem; color:var(--md-on-surface-var); line-height:1.5;">
+        ¿Registrar a <strong id="confirm-practica-name" style="color:var(--md-on-surface);"></strong> como presente en la escuela el día de hoy?
+      </p>
+      
+      <div style="display:flex; gap:12px;">
+        <button class="btn btn-outlined" style="flex:1;" onclick="document.getElementById('modal-confirmar-practica').classList.remove('open')">Cancelar</button>
+        <button class="btn btn-filled" style="flex:1; background:var(--md-success); border-color:var(--md-success);" onclick="executeVerificarPresencia()">Sí, confirmar</button>
       </div>
     </div>
   </div>
 
   <!-- Scripts -->
   <script src="data.js"></script>
+  <script src="asistencia_data.js"></script>
   <script src="firebase-config.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
   <script src="app.js"></script>
+  <style>
+    /* ── Status badges ────────────────────────────────── */
+    .sbadge { display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;padding:2px 9px;border-radius:999px;letter-spacing:.03em;white-space:nowrap; }
+    .sbadge-ok  { background:#DCFCE7; color:#166534; }
+    .sbadge-cap { background:var(--md-primary-container); color:var(--md-primary); }
+    .sbadge-new { background:#EDE9FE; color:#5B21B6; }
+    .sbadge-pen { background:#FEF9C3; color:#713F12; }
+    .ritem-verificado { background:#F0FDF4; border-color:rgba(22,101,52,.15); }
+    .ritem-nuevo      { background:#F5F3FF; border-color:rgba(91,33,182,.15); }
+    :root { --md-success:#166534; --md-success-container:#DCFCE7; }
+    /* verif-item en admin */
+    .verif-item { display:flex;align-items:center;padding:9px 12px;gap:8px;border-bottom:1px solid var(--md-outline-var); }
+    .verif-item:last-child { border-bottom:none; }
+    .verif-item:hover { background:rgba(0,0,0,.03); }
+  </style>
+  <script>
+    // ── Semanas / CUEs ──────────────────────────────────────────
+    window.SEMANAS = {
+      1: [
+        { dia:1, escuela:'ESCUELA N\u00b0 162 "9 DE JULIO"',                                                 nivel:'PRIMARIA',   cue:'100040600P' },
+        { dia:2, escuela:'ESCUELA PROVINCIAL DE EDUCACION TECNICA N\u00b07 "ING. JOSE ALSINA ALCOBERT"',    nivel:'SECUNDARIA', cue:'100008600S' },
+        { dia:3, escuela:'ESCUELA PROVINCIAL DE EDUCACION TECNICA N\u00aa6 "MAESTRO MARIANO FERNANDO PIERI"',nivel:'SECUNDARIA', cue:'100007400S' },
+        { dia:4, escuela:'ESCUELA PROVINCIAL DE MINERIA "DR. BERNARDO HOUSSAY"',                            nivel:'SECUNDARIA', cue:'100007300S' },
+        { dia:5, escuela:'ESCUELA SECUNDARIA N\u00b049',                                                     nivel:'SECUNDARIA', cue:'100063100S' }
+      ]
+    };
+
+    // ── Ir a pantalla Semana ────────────────────────────────────
+    function goSemana(id) {
+      document.querySelectorAll('#app > .screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-semana-' + id).classList.add('active');
+    }
+
+    // ── Seleccionar d\u00eda → cargar lista con estados ────────────
+    function selectDay(semanaIdx, diaIdx) {
+      const dia = window.SEMANAS[semanaIdx][diaIdx - 1];
+      window.selectedDay = { semana: semanaIdx, ...dia };
+      mostrarListaDia(dia);
+    }
+
+    async function mostrarListaDia(dia) {
+      // Navegar inmediatamente y mostrar loading
+      document.querySelectorAll('#app > .screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-lista').classList.add('active');
+      document.getElementById('lista-titulo').textContent = 'D\u00eda ' + dia.dia;
+      document.getElementById('lista-escuela').textContent = dia.escuela;
+      document.getElementById('lista-chip').textContent = 'Cargando...';
+      document.getElementById('lista-container').innerHTML =
+        '<div style="padding:32px;text-align:center;color:var(--md-on-surface-var)">Consultando datos...</div>';
+
+      // Quitar chequeo estricto de ASISTENCIA_DB local, ahora usamos Firebase principal
+      let personas = [];
+
+      window._listaPersonas = personas;
+      window._listaPersonasFiltered = personas;
+
+      // Sets para lookups r\u00e1pidos
+      window._capacitadosDNIs    = new Set();
+      window._capacitadosNombres = new Set();
+      window._verificadosDNIs    = new Set();
+      window._verificadosNombres = new Set();
+      window._nuevosDNIs         = new Set();
+      window._nuevosNombres      = new Set();
+
+      const hoy = hoyISO();
+
+      if (typeof db !== 'undefined' && db) {
+        try {
+          // 1. Personas esperadas en esta escuela
+          const snapCap = await db.collection('capacitacion').where('cue', '==', dia.cue).get();
+          personas = snapCap.docs.map(doc => doc.data());
+          window._listaPersonas = personas;
+          window._listaPersonasFiltered = personas;
+
+          // 2. Registrar quienes asistieron a la capacitaci\u00f3n
+          personas.forEach(d => {
+            if (d.asistio) {
+              if (d.dni) window._capacitadosDNIs.add(String(d.dni));
+              if (d.nombre) window._capacitadosNombres.add(normalize(d.nombre));
+            }
+          });
+
+          // 3. Registrar "Nuevos" que se hayan sumado hoy o ayer
+          const snapNuevos = await db.collection('asistencia').where('esNuevo', '==', true).get();
+          snapNuevos.docs.forEach(doc => {
+            const d = doc.data();
+            if (d.dni) window._nuevosDNIs.add(String(d.dni));
+            if (d.apellido_nombre) window._nuevosNombres.add(normalize(d.apellido_nombre));
+            
+            // Si el nuevo declar\u00f3 estar en esta escuela (a veces el cue es vac\u00edo o distinto),
+            // lo agregamos a la lista si no est\u00e1.
+            if (d.cue === dia.cue) {
+              const existe = personas.some(p => p.dni == d.dni || normalize(p.nombre) === normalize(d.apellido_nombre));
+              if (!existe) {
+                personas.push({
+                  rol: d.role || d.rol || 'Nuevo',
+                  nombre: d.apellido_nombre,
+                  dni: d.dni,
+                  cargo: d.cargo || '',
+                  turno: d.turno || '',
+                  escuela: dia.escuela
+                });
+              }
+            }
+          });
+
+          // 4. Personas ya verificadas hoy en esta escuela
+          const snapVerif = await db.collection('verificacion')
+            .where('fecha', '==', hoy)
+            .where('cue', '==', dia.cue)
+            .get();
+          snapVerif.docs.forEach(doc => {
+            const d = doc.data();
+            if (d.dni) window._verificadosDNIs.add(String(d.dni));
+            if (d.apellido_nombre) window._verificadosNombres.add(normalize(d.apellido_nombre));
+          });
+        } catch(e) {
+          console.warn('[Firebase]', e);
+          document.getElementById('lista-container').innerHTML =
+            '<div style="padding:24px;text-align:center;color:#DC2626;">' +
+            '<strong>Error de conexi\u00f3n:</strong> No se pudo cargar la lista desde la base de datos.<br>' +
+            '<small>Asegurate de estar conectado a internet y tener los permisos de Firebase configurados.</small>' +
+            '</div>';
+          return;
+        }
+      } else {
+        document.getElementById('lista-container').innerHTML =
+          '<div style="padding:24px;text-align:center;color:#DC2626;">' +
+          '<strong>Error:</strong> Firebase no est\u00e1 inicializado.</div>';
+        return;
+      }
+
+      const ap = personas.filter(p => (p.rol||'').toUpperCase().includes('APLICADOR')).length;
+      const ve = personas.filter(p => (p.rol||'').toUpperCase().includes('VEEDOR')).length;
+      const verif = personas.filter(p => getStatus(p) === 'verificado').length;
+      document.getElementById('lista-chip').textContent =
+        personas.length + ' personas \u00b7 ' + ap + ' Aplic. \u00b7 ' + ve + ' Veed. \u00b7 ' + verif + ' presentes';
+
+      renderLista(personas);
+    }
+
+    // ── Calcular estado de una persona ─────────────────────────
+    function getStatus(p) {
+      const dni = p.dni ? String(p.dni) : null;
+      const nom = normalize(p.nombre || '');
+      
+      let cap = 'no_capacitado';
+      if ((dni && window._capacitadosDNIs && window._capacitadosDNIs.has(dni)) ||
+          (window._capacitadosNombres && window._capacitadosNombres.has(nom))) {
+        cap = 'capacitado';
+      } else if ((dni && window._nuevosDNIs && window._nuevosDNIs.has(dni)) ||
+          (window._nuevosNombres && window._nuevosNombres.has(nom))) {
+        cap = 'nuevo';
+      }
+
+      let prac = false;
+      if ((dni && window._verificadosDNIs && window._verificadosDNIs.has(dni)) ||
+          (window._verificadosNombres && window._verificadosNombres.has(nom))) {
+        prac = true;
+      }
+      
+      return { cap, prac };
+    }
+
+    // ── Filtrar en tiempo real ──────────────────────────────────
+    function filtrarLista() {
+      const q = (document.getElementById('lista-search').value || '')
+        .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      const todos = window._listaPersonas || [];
+      const filtradas = q
+        ? todos.filter(p => {
+            const n = p.nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            return q.split(' ').filter(Boolean).every(w => n.includes(w));
+          })
+        : todos;
+      window._listaPersonasFiltered = filtradas;
+      renderLista(filtradas);
+    }
+
+    // ── Renderizar lista con badges de estado ───────────────────
+    function renderLista(personas) {
+      const container = document.getElementById('lista-container');
+      if (!personas.length) {
+        container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--md-on-surface-var)">No se encontraron personas</div>';
+        return;
+      }
+      // Ordenar: pendientes de pr\u00e1ctica primero, luego los verificados. Dentro de eso, ordenados alfab\u00e9ticamente.
+      const sorted = [...personas].sort((a,b) => {
+        const stA = getStatus(a);
+        const stB = getStatus(b);
+        if (stA.prac !== stB.prac) return stA.prac ? 1 : -1;
+        return (a.nombre||'').localeCompare(b.nombre||'');
+      });
+      window._listaPersonasFiltered = sorted;
+
+      container.innerHTML = sorted.map((p, i) => {
+        const st = getStatus(p);
+        const rolTag = (p.rol||'').toUpperCase().includes('VEEDOR') ? 'Veedor' :
+                       (p.rol||'').toUpperCase().includes('DIRECTIVO') ? 'Directivo' : 'Aplicador';
+        
+        let badgeCap = '';
+        if (st.cap === 'capacitado') badgeCap = '<span class="sbadge sbadge-cap">\u2713 Capacitado</span>';
+        else if (st.cap === 'nuevo') badgeCap = '<span class="sbadge sbadge-new">\u2605 Nuevo</span>';
+        else badgeCap = '<span class="sbadge" style="background:#FEE2E2;color:#991B1B">\u2715 No capacitado</span>';
+
+        const badgePrac = st.prac 
+          ? '<span class="sbadge sbadge-ok">\u2713 Pr\u00e1ctica</span>'
+          : '<span class="sbadge sbadge-pen">\u23f3 Ausente hoy</span>';
+
+        const trailing = st.prac
+          ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--md-success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+          : '<svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>';
+        
+        const rowClass = st.prac ? 'ritem-verificado' : (st.cap === 'nuevo' ? 'ritem-nuevo' : 'ritem-pendiente');
+
+        return `<div class="result-item ${rowClass}" id="lista-item-${i}" onclick="verificarPresencia(${i})">
+          <div style="flex:1;min-width:0;">
+            <div class="name">${p.nombre}</div>
+            <div class="meta">${rolTag}${p.turno?' \u00b7 '+p.turno:''}${p.cargo?' \u00b7 '+p.cargo:''}</div>
+            <div style="margin-top:5px; display:flex; gap:6px; flex-wrap:wrap;">${badgeCap} ${badgePrac}</div>
+          </div>${trailing}</div>`;
+      }).join('');
+    }
+
+    // ── Verificar presencia al tocar una persona ────────────────
+    let pendingVerifIdx = null;
+
+    async function verificarPresencia(idx) {
+      const p = (window._listaPersonasFiltered || window._listaPersonas || [])[idx];
+      if (!p) return;
+      const st = getStatus(p);
+      if (st.prac) {
+        setAlert('alert-lista', 'info', p.nombre + ' ya fue registrado/a en pr\u00e1ctica hoy.');
+        return;
+      }
+      
+      pendingVerifIdx = idx;
+      document.getElementById('confirm-practica-name').textContent = p.nombre;
+      document.getElementById('modal-confirmar-practica').classList.add('open');
+    }
+
+    async function executeVerificarPresencia() {
+      if (pendingVerifIdx === null) return;
+      const idx = pendingVerifIdx;
+      pendingVerifIdx = null;
+      document.getElementById('modal-confirmar-practica').classList.remove('open');
+
+      const p = (window._listaPersonasFiltered || window._listaPersonas || [])[idx];
+      if (!p) return;
+      const st = getStatus(p);
+
+      const dia = window.selectedDay;
+      if (!dia) return;
+      const hoy = hoyISO();
+      const hora = horaLocal();
+      const record = {
+        fecha: hoy, hora,
+        semana: dia.semana, dia: dia.dia,
+        escuela: dia.escuela, cue: dia.cue, nivel: dia.nivel || '',
+        rol: p.rol || '',
+        apellido_nombre: p.nombre,
+        dni: p.dni || null,
+        cargo: p.cargo || '',
+        turno: p.turno || '',
+        capacitado: st.cap === 'capacitado' || st.cap === 'nuevo',
+        esNuevo: st.cap === 'nuevo',
+        timestamp: (typeof firebase !== 'undefined') ? firebase.firestore.FieldValue.serverTimestamp() : null,
+      };
+      // Guardar en Firebase
+      const item = document.getElementById('lista-item-' + idx);
+      if (item) item.style.opacity = '0.5';
+      try {
+        if (typeof db !== 'undefined' && db) await db.collection('verificacion').add(record);
+        // Actualizar sets locales
+        if (p.dni) window._verificadosDNIs.add(String(p.dni));
+        window._verificadosNombres.add(normalize(p.nombre || ''));
+        // Actualizar chip
+        const verif = (window._listaPersonas||[]).filter(x => getStatus(x).prac).length;
+        const chip = document.getElementById('lista-chip');
+        if (chip) chip.textContent = chip.textContent.replace(/\d+ presentes/, verif + ' presentes');
+        // Re-renderizar
+        renderLista(window._listaPersonasFiltered || window._listaPersonas || []);
+      } catch(e) {
+        if (item) item.style.opacity = '1';
+        setAlert('alert-lista', 'error', 'Error al guardar. Verificá la conexi\u00f3n.');
+        console.error(e);
+      }
+    }
+
+    // ── Volver a la pantalla de semana ──────────────────────────
+    function goBackFromLista() {
+      const id = window.selectedDay ? window.selectedDay.semana : 1;
+      document.querySelectorAll('#app > .screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-semana-' + id).classList.add('active');
+    }
+
+    // ── Registro directo desde lista ────────────────────────────
+    function registroDirectoDesdeLista() {
+      const dia = window.selectedDay;
+      App.selectRole('otro');
+      if (dia) setTimeout(function() {
+        const escF = document.getElementById('otros-escuela');
+        const cueF = document.getElementById('otros-cue');
+        if (escF) escF.value = dia.escuela;
+        if (cueF) cueF.value = dia.cue;
+      }, 150);
+    }
+  </script>
+
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('Service Worker registrado con éxito.', reg.scope))
+          .catch((err) => console.error('Error al registrar el Service Worker:', err));
+      });
+    }
+  </script>
 
 </body>
 
