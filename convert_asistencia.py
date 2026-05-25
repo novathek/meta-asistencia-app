@@ -30,6 +30,7 @@ for row in ws.iter_rows(min_row=2, values_only=True):
         'dni':     clean(dni),
         'nivel':   clean(nivel),
         'cargo':   clean(cargo),
+        'tipo':    clean(tipo),
         'turno':   clean(turno),
         'escuela': clean(nombre_inst) or clean(escuela),
         'asistio': str(asist).strip().upper() == 'SI',

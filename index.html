@@ -67,7 +67,25 @@
             </div>
             <div class="role-card-body">
               <div class="role-card-title">Semana 1</div>
-              <div class="role-card-sub">5 días de capacitación</div>
+              <div class="role-card-sub">5 días de operativo</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </button>
+
+          <!-- ══ SEMANA 2 ══ -->
+          <button class="role-card semana" id="btn-semana-2" onclick="goSemana(2)">
+            <div class="role-card-leading">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+              </svg>
+            </div>
+            <div class="role-card-body">
+              <div class="role-card-title">Semana 2</div>
+              <div class="role-card-sub">4 días de operativo</div>
             </div>
             <div class="role-card-trailing">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -256,6 +274,108 @@
           </button>
 
         </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+       SCREEN S2 — DÍAS SEMANA 2
+  ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-semana-2">
+
+      <div class="top-app-bar">
+        <button class="icon-btn" onclick="App.goHome()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <span class="top-app-bar-title">Semana 2</span>
+      </div>
+
+      <div class="screen-header">
+        <div class="screen-header-label semana">4 días disponibles</div>
+        <h2 class="screen-title">Seleccioná el día</h2>
+        <p class="screen-desc">Elegí el día para registrar tu asistencia</p>
+      </div>
+
+      <div class="screen-content" style="padding-top:0;">
+        <div class="role-cards">
+
+          <button class="role-card dia" id="btn-dia-6" onclick="selectDayMulti(2,6)">
+            <div class="role-card-leading dia-badge">6</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 6</div>
+              <div class="role-card-sub">3 escuelas · PRIMARIA / SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-7" onclick="selectDayMulti(2,7)">
+            <div class="role-card-leading dia-badge">7</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 7</div>
+              <div class="role-card-sub">5 escuelas · PRIMARIA / SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-8" onclick="selectDayMulti(2,8)">
+            <div class="role-card-leading dia-badge">8</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 8</div>
+              <div class="role-card-sub">4 escuelas · PRIMARIA / SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-9" onclick="selectDayMulti(2,9)">
+            <div class="role-card-leading dia-badge">9</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 9</div>
+              <div class="role-card-sub">4 escuelas · PRIMARIA / SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+       SCREEN ESCUELAS — SELECTOR DE ESCUELA DEL DÍA
+  ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-escuelas">
+
+      <div class="top-app-bar">
+        <button class="icon-btn" onclick="goBackFromEscuelas()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <span class="top-app-bar-title" id="escuelas-titulo">Día</span>
+      </div>
+
+      <div class="screen-header">
+        <div class="screen-header-label semana" id="escuelas-chip">Seleccioná tu escuela</div>
+        <h2 class="screen-title">¿En qué escuela estás?</h2>
+        <p class="screen-desc">Tocá la escuela que te corresponde</p>
+      </div>
+
+      <div class="screen-content" style="padding-top:0;">
+        <div class="role-cards" id="escuelas-container"></div>
       </div>
     </div>
 
@@ -787,11 +907,49 @@
     // ── Semanas / CUEs ──────────────────────────────────────────
     window.SEMANAS = {
       1: [
-        { dia:1, escuela:'ESCUELA N\u00b0 162 "9 DE JULIO"',                                                 nivel:'PRIMARIA',   cue:'100040600P' },
-        { dia:2, escuela:'ESCUELA PROVINCIAL DE EDUCACION TECNICA N\u00b07 "ING. JOSE ALSINA ALCOBERT"',    nivel:'SECUNDARIA', cue:'100008600S' },
-        { dia:3, escuela:'ESCUELA PROVINCIAL DE EDUCACION TECNICA N\u00aa6 "MAESTRO MARIANO FERNANDO PIERI"',nivel:'SECUNDARIA', cue:'100007400S' },
-        { dia:4, escuela:'ESCUELA PROVINCIAL DE MINERIA "DR. BERNARDO HOUSSAY"',                            nivel:'SECUNDARIA', cue:'100007300S' },
-        { dia:5, escuela:'ESCUELA SECUNDARIA N\u00b049',                                                     nivel:'SECUNDARIA', cue:'100063100S' }
+        { dia:1, escuela:'ESCUELA N\u00b0 162 "9 DE JULIO"',                                                  nivel:'PRIMARIA',   cue:'100040600P' },
+        { dia:2, escuela:'ESCUELA PROVINCIAL DE EDUCACION TECNICA N\u00b07 "ING. JOSE ALSINA ALCOBERT"',     nivel:'SECUNDARIA', cue:'100008600S' },
+        { dia:3, escuela:'ESCUELA PROVINCIAL DE EDUCACION TECNICA N\u00aa6 "MAESTRO MARIANO FERNANDO PIERI"', nivel:'SECUNDARIA', cue:'100007400S' },
+        { dia:4, escuela:'ESCUELA PROVINCIAL DE MINERIA "DR. BERNARDO HOUSSAY"',                             nivel:'SECUNDARIA', cue:'100007300S' },
+        { dia:5, escuela:'ESCUELA SECUNDARIA N\u00b049',                                                      nivel:'SECUNDARIA', cue:'100063100S' }
+      ],
+      2: [
+        {
+          dia: 6,
+          escuelas: [
+            { escuela:'ESCUELA N\u00b0 15 NTRA.SRA.DEL VALLE',    nivel:'PRIMARIA',   cue:'100063300P' },
+            { escuela:'ESCUELA PRIVADA "MARIA MONTESSORI"',        nivel:'PRIMARIA',   cue:'100080500P' },
+            { escuela:'ESCUELA SECUNDARIA N\u00b0 93',             nivel:'SECUNDARIA', cue:'100091500S' }
+          ]
+        },
+        {
+          dia: 7,
+          escuelas: [
+            { escuela:'ESCUELA N\u00b0 198',                                              nivel:'PRIMARIA',   cue:'100077300P' },
+            { escuela:'ESCUELA SECUNDARIA N\u00b048 "PBRO.RAMON ROSA OLMOS"',             nivel:'SECUNDARIA', cue:'100034700S' },
+            { escuela:'ESCUELA N\u00b0 324',                                              nivel:'PRIMARIA',   cue:'100042600P' },
+            { escuela:'ESCUELA PRIVADA "MARIA MONTESSORI"',                               nivel:'SECUNDARIA', cue:'100080500S' },
+            { escuela:'ESCUELA SECUNDARIA N\u00b0 89',                                    nivel:'SECUNDARIA', cue:'100091100S' }
+          ]
+        },
+        {
+          dia: 8,
+          escuelas: [
+            { escuela:'ESCUELA N\u00b0 323 JUAN ALFONSO CARRIZO',                         nivel:'PRIMARIA',   cue:'100008100P' },
+            { escuela:'ESCUELA SECUNDARIA N\u00b050',                                     nivel:'SECUNDARIA', cue:'100040300S' },
+            { escuela:'ESCUELA SECUNDARIA N\u00b06 CACIQUE JUAN CHELEMIN',                nivel:'SECUNDARIA', cue:'100040700S' },
+            { escuela:'ESCUELA SECUNDARIA N\u00b0 84',                                    nivel:'SECUNDARIA', cue:'100090600S' }
+          ]
+        },
+        {
+          dia: 9,
+          escuelas: [
+            { escuela:'ESCUELA N\u00b0 126 BARRIO APOLO',                                 nivel:'PRIMARIA',   cue:'100040400P' },
+            { escuela:'ESCUELA N\u00b0992 (ESC. N\u00b044-139)',                          nivel:'PRIMARIA',   cue:'100069400P' },
+            { escuela:'ESCUELA N\u00aa195 "REVOLUCION DE MAYO"',                          nivel:'PRIMARIA',   cue:'100084200P' },
+            { escuela:'ESCUELA SECUNDARIA N\u00b0 92',                                    nivel:'SECUNDARIA', cue:'100091400S' }
+          ]
+        }
       ]
     };
 
@@ -801,11 +959,62 @@
       document.getElementById('screen-semana-' + id).classList.add('active');
     }
 
-    // ── Seleccionar d\u00eda → cargar lista con estados ────────────
+    // ── Seleccionar día → cargar lista con estados (Semana 1: 1 escuela por día) ──
     function selectDay(semanaIdx, diaIdx) {
       const dia = window.SEMANAS[semanaIdx][diaIdx - 1];
       window.selectedDay = { semana: semanaIdx, ...dia };
       mostrarListaDia(dia);
+    }
+
+    // ── Seleccionar día → mostrar escuelas (Semana 2: múltiples escuelas por día) ──
+    function selectDayMulti(semanaIdx, diaNum) {
+      const dias = window.SEMANAS[semanaIdx];
+      const diaData = dias.find(d => d.dia === diaNum);
+      if (!diaData) return;
+      window.selectedDayMulti = { semana: semanaIdx, dia: diaNum };
+
+      // Actualizar pantalla de escuelas
+      document.getElementById('escuelas-titulo').textContent = 'Día ' + diaNum;
+      document.getElementById('escuelas-chip').textContent = diaData.escuelas.length + ' escuelas disponibles';
+
+      const container = document.getElementById('escuelas-container');
+      container.innerHTML = diaData.escuelas.map((esc, i) => `
+        <button class="role-card dia" onclick="selectEscuela(${semanaIdx}, ${diaNum}, ${i})">
+          <div class="role-card-leading dia-badge" style="font-size:.7rem;min-width:36px;text-align:center;">${esc.nivel === 'PRIMARIA' ? 'PRI' : 'SEC'}</div>
+          <div class="role-card-body">
+            <div class="role-card-title" style="font-size:.9rem;">${esc.escuela}</div>
+            <div class="role-card-sub">${esc.nivel} · CUE: ${esc.cue}</div>
+          </div>
+          <div class="role-card-trailing">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+          </div>
+        </button>`).join('');
+
+      document.querySelectorAll('#app > .screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-escuelas').classList.add('active');
+    }
+
+    // ── Seleccionar escuela específica → cargar lista ───────────
+    function selectEscuela(semanaIdx, diaNum, escIdx) {
+      const dias = window.SEMANAS[semanaIdx];
+      const diaData = dias.find(d => d.dia === diaNum);
+      if (!diaData) return;
+      const esc = diaData.escuelas[escIdx];
+      const dia = { semana: semanaIdx, dia: diaNum, escuela: esc.escuela, nivel: esc.nivel, cue: esc.cue };
+      window.selectedDay = dia;
+      mostrarListaDia(dia);
+    }
+
+    // ── Volver desde pantalla de escuelas al día ────────────────
+    function goBackFromEscuelas() {
+      const s = window.selectedDayMulti;
+      if (s) {
+        document.querySelectorAll('#app > .screen').forEach(sc => sc.classList.remove('active'));
+        document.getElementById('screen-semana-' + s.semana).classList.add('active');
+      } else {
+        App.goHome();
+      }
     }
 
     async function mostrarListaDia(dia) {
@@ -968,6 +1177,25 @@
         const rolTag = (p.rol||'').toUpperCase().includes('VEEDOR') ? 'Veedor' :
                        (p.rol||'').toUpperCase().includes('DIRECTIVO') ? 'Directivo' : 'Aplicador';
         
+        let tipoTag = '';
+        if (rolTag === 'Aplicador' && typeof DB !== 'undefined' && DB.aplicadores) {
+          const dniStr = String(p.dni || '').trim();
+          let matched = null;
+          if (dniStr && dniStr !== 'null') {
+            matched = DB.aplicadores.find(a => String(a.dni) === dniStr);
+          }
+          if (!matched && p.nombre) {
+            const nomP = p.nombre.toLowerCase().replace(/,/g,'').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+            matched = DB.aplicadores.find(a => {
+              const aNom = (a.apellido_nombre||'').toLowerCase().replace(/,/g,'').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+              return aNom === nomP || (nomP.length > 5 && aNom.includes(nomP));
+            });
+          }
+          if (matched && matched.tipo) {
+            tipoTag = ` \u00b7 ${matched.tipo}`;
+          }
+        }
+
         let badgeCap = '';
         if (st.cap === 'capacitado') badgeCap = '<span class="sbadge sbadge-cap">\u2713 Capacitado</span>';
         else if (st.cap === 'nuevo') badgeCap = '<span class="sbadge sbadge-new">\u2605 Nuevo</span>';
@@ -986,7 +1214,7 @@
         return `<div class="result-item ${rowClass}" id="lista-item-${i}" onclick="verificarPresencia(${i})">
           <div style="flex:1;min-width:0;">
             <div class="name">${p.nombre}</div>
-            <div class="meta">${rolTag}${p.turno?' \u00b7 '+p.turno:''}${p.cargo?' \u00b7 '+p.cargo:''}</div>
+            <div class="meta">${rolTag}${tipoTag}${p.turno?' \u00b7 '+p.turno:''}${p.cargo?' \u00b7 '+p.cargo:''}</div>
             <div style="margin-top:5px; display:flex; gap:6px; flex-wrap:wrap;">${badgeCap} ${badgePrac}</div>
           </div>${trailing}</div>`;
       }).join('');
@@ -1057,11 +1285,22 @@
       }
     }
 
-    // ── Volver a la pantalla de semana ──────────────────────────
+    // ── Volver a la pantalla de semana / escuelas ──────────────
     function goBackFromLista() {
-      const id = window.selectedDay ? window.selectedDay.semana : 1;
-      document.querySelectorAll('#app > .screen').forEach(s => s.classList.remove('active'));
-      document.getElementById('screen-semana-' + id).classList.add('active');
+      const dia = window.selectedDay;
+      if (!dia) { App.goHome(); return; }
+      // Si el día tiene múltiples escuelas (Semana 2), volver a la pantalla de escuelas
+      const diasSemana = window.SEMANAS[dia.semana];
+      const diaData = diasSemana ? diasSemana.find(d => d.dia === dia.dia) : null;
+      if (diaData && diaData.escuelas) {
+        // Volver a pantalla de escuelas
+        document.querySelectorAll('#app > .screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('screen-escuelas').classList.add('active');
+      } else {
+        // Semana 1: volver a pantalla de días
+        document.querySelectorAll('#app > .screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('screen-semana-' + dia.semana).classList.add('active');
+      }
     }
 
     // ── Registro directo desde lista ────────────────────────────

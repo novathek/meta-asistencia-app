@@ -317,6 +317,7 @@ const App = {
 
     if (State.role === 'aplicador') {
       rows.push(['DNI',    persona.dni]);
+      if (persona.tipo) rows.push(['Tipo',   persona.tipo]);
       rows.push(['Cargo',  persona.cargo || '—']);
       rows.push(['CUE',    persona.cue]);
       rows.push(['Turno',  persona.turno || '—']);
@@ -379,6 +380,7 @@ const App = {
       cue:      persona.cue || '',
       turno:    persona.turno || '',
       cargo:    persona.cargo || '',
+      tipo:     persona.tipo || '',
       escuela:  persona.escuela_ref || persona.escuela || '',
       nivel:    persona.nivel || '',
       mail:     persona.mail || '',

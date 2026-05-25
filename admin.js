@@ -1,80 +1,218 @@
 'use strict';
 
+// ── Datos ────────────────────────────────────────────────────────
 const SEMANA_1 = [
-  { semana:1, dia:1, escuela:'ESCUELA N\u00b0 162 "9 DE JULIO"',                                                 nivel:'PRIMARIA',   cue:'100040600P' },
-  { semana:1, dia:2, escuela:'ESCUELA PROVINCIAL DE EDUCACION TECNICA N\u00b07 "ING. JOSE ALSINA ALCOBERT"',    nivel:'SECUNDARIA', cue:'100008600S' },
-  { semana:1, dia:3, escuela:'ESCUELA PROVINCIAL DE EDUCACION TECNICA N\u00aa6 "MAESTRO MARIANO FERNANDO PIERI"',nivel:'SECUNDARIA', cue:'100007400S' },
-  { semana:1, dia:4, escuela:'ESCUELA PROVINCIAL DE MINERIA "DR. BERNARDO HOUSSAY"',                            nivel:'SECUNDARIA', cue:'100007300S' },
-  { semana:1, dia:5, escuela:'ESCUELA SECUNDARIA N\u00b049',                                                     nivel:'SECUNDARIA', cue:'100063100S' }
+  { semana:1, dia:1, escuela:'ESCUELA N\u00b0 162 "9 DE JULIO"',                                                  nivel:'PRIMARIA',   cue:'100040600P' },
+  { semana:1, dia:2, escuela:'ESCUELA PROVINCIAL DE EDUCACION TECNICA N\u00b07 "ING. JOSE ALSINA ALCOBERT"',     nivel:'SECUNDARIA', cue:'100008600S' },
+  { semana:1, dia:3, escuela:'ESCUELA PROVINCIAL DE EDUCACION TECNICA N\u00aa6 "MAESTRO MARIANO FERNANDO PIERI"', nivel:'SECUNDARIA', cue:'100007400S' },
+  { semana:1, dia:4, escuela:'ESCUELA PROVINCIAL DE MINERIA "DR. BERNARDO HOUSSAY"',                             nivel:'SECUNDARIA', cue:'100007300S' },
+  { semana:1, dia:5, escuela:'ESCUELA SECUNDARIA N\u00b049',                                                      nivel:'SECUNDARIA', cue:'100063100S' }
 ];
 
-function hoyISO() {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-}
-function horaLocal() {
-  return new Date().toLocaleTimeString('es-AR', { hour12: false });
-}
+const SEMANA_2 = [
+  { semana:2, dia:6, escuela:'ESCUELA N\u00b0 15 NTRA.SRA.DEL VALLE',                    nivel:'PRIMARIA',   cue:'100063300P' },
+  { semana:2, dia:6, escuela:'ESCUELA PRIVADA "MARIA MONTESSORI"',                        nivel:'PRIMARIA',   cue:'100080500P' },
+  { semana:2, dia:6, escuela:'ESCUELA SECUNDARIA N\u00b0 93',                             nivel:'SECUNDARIA', cue:'100091500S' },
+  { semana:2, dia:7, escuela:'ESCUELA N\u00b0 198',                                       nivel:'PRIMARIA',   cue:'100077300P' },
+  { semana:2, dia:7, escuela:'ESCUELA SECUNDARIA N\u00b048 "PBRO.RAMON ROSA OLMOS"',      nivel:'SECUNDARIA', cue:'100034700S' },
+  { semana:2, dia:7, escuela:'ESCUELA N\u00b0 324',                                       nivel:'PRIMARIA',   cue:'100042600P' },
+  { semana:2, dia:7, escuela:'ESCUELA PRIVADA "MARIA MONTESSORI"',                        nivel:'SECUNDARIA', cue:'100080500S' },
+  { semana:2, dia:7, escuela:'ESCUELA SECUNDARIA N\u00b0 89',                             nivel:'SECUNDARIA', cue:'100091100S' },
+  { semana:2, dia:8, escuela:'ESCUELA N\u00b0 323 JUAN ALFONSO CARRIZO',                  nivel:'PRIMARIA',   cue:'100008100P' },
+  { semana:2, dia:8, escuela:'ESCUELA SECUNDARIA N\u00b050',                              nivel:'SECUNDARIA', cue:'100040300S' },
+  { semana:2, dia:8, escuela:'ESCUELA SECUNDARIA N\u00b06 CACIQUE JUAN CHELEMIN',         nivel:'SECUNDARIA', cue:'100040700S' },
+  { semana:2, dia:8, escuela:'ESCUELA SECUNDARIA N\u00b0 84',                             nivel:'SECUNDARIA', cue:'100090600S' },
+  { semana:2, dia:9, escuela:'ESCUELA N\u00b0 126 BARRIO APOLO',                          nivel:'PRIMARIA',   cue:'100040400P' },
+  { semana:2, dia:9, escuela:'ESCUELA N\u00b0992 (ESC. N\u00b044-139)',                   nivel:'PRIMARIA',   cue:'100069400P' },
+  { semana:2, dia:9, escuela:'ESCUELA N\u00aa195 "REVOLUCION DE MAYO"',                   nivel:'PRIMARIA',   cue:'100084200P' },
+  { semana:2, dia:9, escuela:'ESCUELA SECUNDARIA N\u00b0 92',                             nivel:'SECUNDARIA', cue:'100091400S' }
+];
 
+const TODOS = [...SEMANA_1, ...SEMANA_2];
+
+// ── Helpers ──────────────────────────────────────────────────────
+function hoyISO() {
+  const n = new Date();
+  return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
+}
+function horaLocal() { return new Date().toLocaleTimeString('es-AR', { hour12: false }); }
+function norm(s) { return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+
+// ── Firebase ─────────────────────────────────────────────────────
 let db;
 try {
   firebase.initializeApp(FIREBASE_CONFIG);
   db = firebase.firestore();
-} catch (e) {
-  console.error('[Firebase] error', e);
-}
+} catch(e) { console.error('[Firebase]', e); }
 
+// ── Admin ────────────────────────────────────────────────────────
 const Admin = {
-  selectedDayIdx: -1,
+  activeCue: null,   // CUE de la escuela activa
   personas: [],
+  // Estado de apertura del árbol: { 's1': true, 's2': true, 'd1': true, ... }
+  treeOpen: { s1: true, s2: false },
 
+  // ── Init ────────────────────────────────────────────────────
   init() {
-    this.renderTabs();
-    if(db) this.selectDay(0);
-    else document.getElementById('people-list').innerHTML = '<div class="empty-state">Error: Firebase no configurado</div>';
+    this.buildTree(TODOS);
+    if (!db) this.showError('Firebase no configurado');
   },
 
-  renderTabs() {
-    const tabs = document.getElementById('day-tabs');
-    tabs.innerHTML = SEMANA_1.map((d, i) => `
-      <button class="day-tab" id="tab-${i}" onclick="Admin.selectDay(${i})">D\u00eda ${d.dia}</button>
-    `).join('');
+  // ── Construir árbol ─────────────────────────────────────────
+  buildTree(data) {
+    // Agrupar: semana → día → escuelas
+    const tree = {};
+    data.forEach(d => {
+      const sk = `s${d.semana}`;
+      const dk = `d${d.dia}`;
+      if (!tree[sk]) tree[sk] = { semana: d.semana, dias: {} };
+      if (!tree[sk].dias[dk]) tree[sk].dias[dk] = { dia: d.dia, escuelas: [] };
+      tree[sk].dias[dk].escuelas.push(d);
+    });
+
+    let html = '';
+    Object.values(tree).forEach(s => {
+      const sk = `s${s.semana}`;
+      const isOpen = !!this.treeOpen[sk];
+      const totalEsc = Object.values(s.dias).reduce((a,d) => a + d.escuelas.length, 0);
+      html += `
+      <div class="tree-semana s${s.semana} ${isOpen ? 'open' : ''}" id="ts-${sk}">
+        <div class="tree-semana-header" onclick="Admin.toggleSemana('${sk}')">
+          <svg class="tree-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+          <span class="tree-semana-label">Semana ${s.semana}</span>
+          <span class="tree-semana-count">${totalEsc} escuelas</span>
+        </div>
+        <div class="tree-dia-list">`;
+
+      Object.values(s.dias).sort((a,b) => a.dia - b.dia).forEach(d => {
+        const dk = `d${d.dia}`;
+        const isDiaOpen = !!this.treeOpen[dk];
+        html += `
+          <div class="tree-dia s${s.semana} ${isDiaOpen ? 'open' : ''}" id="td-${dk}">
+            <div class="tree-dia-header" onclick="Admin.toggleDia('${dk}')">
+              <svg class="tree-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+              <span class="tree-dia-label">Día ${d.dia}</span>
+              <span class="tree-dia-count">${d.escuelas.length}</span>
+            </div>
+            <div class="tree-esc-list">`;
+
+        d.escuelas.forEach(esc => {
+          const isActive = esc.cue === this.activeCue;
+          const activeClass = isActive ? ` active-s${s.semana}` : '';
+          html += `
+              <button class="tree-esc${activeClass}" id="te-${esc.cue}"
+                onclick="Admin.selectEscuela('${esc.cue}')">
+                <span class="tree-esc-nivel">${esc.nivel === 'PRIMARIA' ? 'PRI' : 'SEC'}</span>
+                <span class="tree-esc-name">${esc.escuela}</span>
+              </button>`;
+        });
+
+        html += `
+            </div>
+          </div>`;
+      });
+
+      html += `
+        </div>
+      </div>`;
+    });
+
+    document.getElementById('tree').innerHTML = html;
   },
 
-  async selectDay(idx) {
-    if(this.selectedDayIdx === idx) return;
-    this.selectedDayIdx = idx;
-    
-    document.querySelectorAll('.day-tab').forEach(el => el.classList.remove('active'));
-    const activeTab = document.getElementById(`tab-${idx}`);
-    if(activeTab) activeTab.classList.add('active');
-    
-    const dayData = SEMANA_1[idx];
-    
-    document.getElementById('school-header').innerHTML = `
-      <div class="school-day">D\u00eda ${dayData.dia}</div>
-      <div class="school-title">${dayData.escuela} <span style="color:#64748B;font-size:0.85rem;font-weight:400;">(CUE: ${dayData.cue})</span></div>
-      <input type="text" id="search" class="search-box" placeholder="Buscar por nombre o DNI..." oninput="Admin.renderList()">
+  // ── Toggle semana ────────────────────────────────────────────
+  toggleSemana(sk) {
+    this.treeOpen[sk] = !this.treeOpen[sk];
+    const el = document.getElementById(`ts-${sk}`);
+    if (el) el.classList.toggle('open', this.treeOpen[sk]);
+  },
+
+  // ── Toggle día ───────────────────────────────────────────────
+  toggleDia(dk) {
+    this.treeOpen[dk] = !this.treeOpen[dk];
+    const el = document.getElementById(`td-${dk}`);
+    if (el) el.classList.toggle('open', this.treeOpen[dk]);
+  },
+
+  // ── Filtrar árbol por texto ──────────────────────────────────
+  filterTree() {
+    const q = norm(document.getElementById('sidebar-search').value);
+    if (!q) { this.buildTree(TODOS); return; }
+    const filtered = TODOS.filter(d => norm(d.escuela).includes(q) || d.cue.includes(q));
+    // Abrir todo cuando hay filtro
+    const prevOpen = { ...this.treeOpen };
+    filtered.forEach(d => {
+      this.treeOpen[`s${d.semana}`] = true;
+      this.treeOpen[`d${d.dia}`] = true;
+    });
+    this.buildTree(filtered);
+    // Restaurar estado si se borra el filtro
+    if (!q) this.treeOpen = prevOpen;
+  },
+
+  // ── Seleccionar escuela ──────────────────────────────────────
+  async selectEscuela(cue) {
+    if (this.activeCue === cue) return;
+    this.activeCue = cue;
+
+    const dayData = TODOS.find(d => d.cue === cue);
+    if (!dayData) return;
+
+    // Abrir el día correspondiente en el árbol
+    this.treeOpen[`s${dayData.semana}`] = true;
+    this.treeOpen[`d${dayData.dia}`] = true;
+    this.buildTree(TODOS);
+
+    // Breadcrumb
+    document.getElementById('breadcrumb').innerHTML = `
+      <span>Semana ${dayData.semana}</span>
+      <span class="sep">›</span>
+      <span>Día ${dayData.dia}</span>
+      <span class="sep">›</span>
+      <span>${dayData.escuela}</span>
     `;
-    
-    document.getElementById('stats-bar').style.display = 'none';
-    document.getElementById('people-list').innerHTML = '<div class="empty-state">Cargando base de datos...</div>';
-    
+
+    // Mostrar header de escuela
+    const isS2 = dayData.semana === 2;
+    document.getElementById('main').innerHTML = `
+      <div class="school-header">
+        <div class="school-header-meta">
+          <span class="school-chip s${dayData.semana}">Semana ${dayData.semana} · Día ${dayData.dia}</span>
+          <span class="school-chip nivel">${dayData.nivel}</span>
+        </div>
+        <div class="school-name">${dayData.escuela}</div>
+        <div class="school-cue">CUE: ${dayData.cue}</div>
+        <div class="school-search-row">
+          <input type="text" class="school-search" id="search"
+            placeholder="Buscar por nombre o DNI…" oninput="Admin.renderList()" />
+        </div>
+      </div>
+      <div class="stats-row" id="stats-row" style="display:none;"></div>
+      <div class="people-wrap" id="people-list">
+        <div class="empty">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <div class="empty-title">Cargando datos…</div>
+        </div>
+      </div>
+    `;
+
     try {
-      // 1. Obtener los esperados (capacitacion)
-      const snapCap = await db.collection('capacitacion').where('cue', '==', dayData.cue).get();
-      
-      // 2. Obtener los verificados en campo (practica)
-      const snapVerif = await db.collection('verificacion')
-        .where('dia', '==', dayData.dia)
-        .where('cue', '==', dayData.cue)
-        .get();
-        
-      const verifMap = new Map(); // Para saber el ID del documento si queremos borrarlo
+      const [snapCap, snapVerif] = await Promise.all([
+        db.collection('capacitacion').where('cue', '==', cue).get(),
+        db.collection('verificacion').where('dia', '==', dayData.dia).where('cue', '==', cue).get()
+      ]);
+
+      const verifMap = new Map();
       snapVerif.docs.forEach(doc => {
         const d = doc.data();
-        if(d.dni) verifMap.set(String(d.dni), doc.id);
-        if(d.apellido_nombre) verifMap.set(d.apellido_nombre.toLowerCase().trim(), doc.id);
+        if (d.dni) verifMap.set(String(d.dni), doc.id);
+        if (d.apellido_nombre) verifMap.set(d.apellido_nombre.toLowerCase().trim(), doc.id);
       });
 
       this.personas = snapCap.docs.map(doc => {
@@ -82,76 +220,75 @@ const Admin = {
         let verifId = null;
         if (d.dni && verifMap.has(String(d.dni))) verifId = verifMap.get(String(d.dni));
         else if (d.nombre && verifMap.has(d.nombre.toLowerCase().trim())) verifId = verifMap.get(d.nombre.toLowerCase().trim());
-        
-        return { 
-          id: doc.id, 
-          ...d, 
-          verifId: verifId, 
-          presente: !!verifId 
-        };
+        return { id: doc.id, ...d, verifId, presente: !!verifId };
       });
-      
+
       this.personas.sort((a,b) => (a.nombre||'').localeCompare(b.nombre||''));
       this.renderList();
     } catch(e) {
       console.error(e);
-      document.getElementById('people-list').innerHTML = '<div class="empty-state" style="color:#DC2626">Error al cargar datos. Verifica tu conexi\u00f3n y permisos.</div>';
+      this.showError('Error al cargar datos. Verificá tu conexión y permisos de Firebase.');
     }
   },
 
+  // ── Renderizar lista ─────────────────────────────────────────
   renderList() {
-    const list = document.getElementById('people-list');
-    const searchEl = document.getElementById('search');
-    const q = searchEl ? searchEl.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : '';
-    
-    const filtered = this.personas.filter(p => {
-      const nom = (p.nombre||'').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const dni = String(p.dni||'');
-      return nom.includes(q) || dni.includes(q);
-    });
-    
+    const listEl = document.getElementById('people-list');
+    const statsEl = document.getElementById('stats-row');
+    if (!listEl) return;
+
+    const q = norm(document.getElementById('search')?.value || '');
+    const filtered = this.personas.filter(p =>
+      norm(p.nombre).includes(q) || String(p.dni||'').includes(q)
+    );
+
     // Stats
     const total = filtered.length;
-    const asistieronCap = filtered.filter(p => p.asistio).length;
-    const asistieronPrac = filtered.filter(p => p.presente).length;
-    const statsBar = document.getElementById('stats-bar');
-    statsBar.style.display = 'flex';
-    statsBar.innerHTML = `
-      <div>Total: ${total}</div>
-      <div style="color:#2563EB">Capacitados: ${asistieronCap}</div>
-      <div style="color:#166534">En pr\u00e1ctica: ${asistieronPrac}</div>
-    `;
+    const cap   = filtered.filter(p => p.asistio).length;
+    const prac  = filtered.filter(p => p.presente).length;
+    const pend  = total - prac;
 
-    if (filtered.length === 0) {
-      list.innerHTML = '<div class="empty-state">No se encontraron personas</div>';
+    if (statsEl) {
+      statsEl.style.display = 'flex';
+      statsEl.innerHTML = `
+        <div class="stat-card total"><div class="stat-num">${total}</div><div class="stat-lbl">Total</div></div>
+        <div class="stat-card cap"><div class="stat-num">${cap}</div><div class="stat-lbl">Capacitados</div></div>
+        <div class="stat-card prac"><div class="stat-num">${prac}</div><div class="stat-lbl">En práctica</div></div>
+        <div class="stat-card pend"><div class="stat-num">${pend}</div><div class="stat-lbl">Pendientes</div></div>
+      `;
+    }
+
+    if (!filtered.length) {
+      listEl.innerHTML = `<div class="empty"><div class="empty-title">Sin resultados</div><div class="empty-sub">Probá con otro nombre o DNI</div></div>`;
       return;
     }
 
-    list.innerHTML = filtered.map(p => `
-      <div class="person-item">
+    listEl.innerHTML = filtered.map(p => `
+      <div class="person-row${p.presente ? ' is-present' : ''}">
         <div class="person-info">
           <div class="person-name">${p.nombre}</div>
-          <div class="person-meta">DNI: ${p.dni||'S/D'} \u2022 ${p.rol||'S/D'}</div>
-          ${p.cargo ? `<div class="person-badge">${p.cargo}</div>` : ''}
-          ${p.turno ? `<div class="person-badge" style="background:#F3E8FF;color:#6B21A8;">Turno ${p.turno}</div>` : ''}
+          <div class="person-meta">DNI: ${p.dni||'S/D'} &bull; ${p.rol||'S/D'}</div>
+          <div class="person-tags">
+            ${p.tipo  ? `<span class="tag tag-tipo">${p.tipo}</span>` : ''}
+            ${p.cargo ? `<span class="tag tag-cargo">${p.cargo}</span>` : ''}
+            ${p.turno ? `<span class="tag tag-turno">T. ${p.turno}</span>` : ''}
+          </div>
         </div>
-        
-        <div class="actions-col">
-          <!-- Toggle Capacitaci\u00f3n -->
-          <div class="switch-container">
-            <div class="switch-label ${p.asistio ? 'yes' : ''}" style="${p.asistio ? 'color:#2563EB' : ''}" id="lbl-cap-${p.id}">Capacit.</div>
-            <label class="switch">
-              <input type="checkbox" id="chk-cap-${p.id}" ${p.asistio ? 'checked' : ''} onchange="Admin.toggleCapacitacion('${p.id}', this)">
-              <span class="slider blue"></span>
+        <div class="toggles">
+          <div class="toggle-wrap">
+            <div class="toggle-lbl ${p.asistio ? 'on-cap' : ''}" id="lbl-cap-${p.id}">Capacit.</div>
+            <label class="sw">
+              <input type="checkbox" id="chk-cap-${p.id}" ${p.asistio ? 'checked' : ''}
+                onchange="Admin.toggleCapacitacion('${p.id}', this)">
+              <span class="sw-track blue"></span>
             </label>
           </div>
-          
-          <!-- Toggle Pr\u00e1ctica -->
-          <div class="switch-container">
-            <div class="switch-label ${p.presente ? 'yes' : ''}" id="lbl-prac-${p.id}">Pr\u00e1ctica</div>
-            <label class="switch">
-              <input type="checkbox" id="chk-prac-${p.id}" ${p.presente ? 'checked' : ''} onchange="Admin.togglePractica('${p.id}', this)">
-              <span class="slider"></span>
+          <div class="toggle-wrap">
+            <div class="toggle-lbl ${p.presente ? 'on-prac' : ''}" id="lbl-prac-${p.id}">Práctica</div>
+            <label class="sw">
+              <input type="checkbox" id="chk-prac-${p.id}" ${p.presente ? 'checked' : ''}
+                onchange="Admin.togglePractica('${p.id}', this)">
+              <span class="sw-track"></span>
             </label>
           </div>
         </div>
@@ -159,149 +296,177 @@ const Admin = {
     `).join('');
   },
 
+  // ── Toggle Capacitación ──────────────────────────────────────
   async toggleCapacitacion(docId, checkbox) {
     checkbox.disabled = true;
-    const nuevoEstado = checkbox.checked;
+    const val = checkbox.checked;
     const lbl = document.getElementById(`lbl-cap-${docId}`);
-    if(lbl) { lbl.textContent = '...'; lbl.style.color = '#94A3B8'; }
-
+    if (lbl) { lbl.textContent = '…'; lbl.className = 'toggle-lbl'; }
     try {
-      await db.collection('capacitacion').doc(docId).update({ asistio: nuevoEstado });
+      await db.collection('capacitacion').doc(docId).update({ asistio: val });
       const p = this.personas.find(x => x.id === docId);
-      if (p) p.asistio = nuevoEstado;
-      
-      if(lbl) {
-        lbl.textContent = 'Capacit.';
-        lbl.style.color = nuevoEstado ? '#2563EB' : '#94A3B8';
-      }
+      if (p) p.asistio = val;
+      if (lbl) { lbl.textContent = 'Capacit.'; lbl.className = `toggle-lbl ${val ? 'on-cap' : ''}`; }
       checkbox.disabled = false;
-      this.updateStatsUI();
+      this.updateStats();
     } catch(e) {
       alert('Error: ' + e.message);
-      checkbox.checked = !nuevoEstado;
-      checkbox.disabled = false;
-      if(lbl) {
-        lbl.textContent = 'Capacit.';
-        lbl.style.color = !nuevoEstado ? '#2563EB' : '#94A3B8';
-      }
+      checkbox.checked = !val; checkbox.disabled = false;
+      if (lbl) { lbl.textContent = 'Capacit.'; lbl.className = `toggle-lbl ${!val ? 'on-cap' : ''}`; }
     }
   },
 
+  // ── Toggle Práctica ──────────────────────────────────────────
   async togglePractica(personId, checkbox) {
     checkbox.disabled = true;
-    const nuevoEstado = checkbox.checked;
+    const val = checkbox.checked;
     const lbl = document.getElementById(`lbl-prac-${personId}`);
-    if(lbl) { lbl.textContent = '...'; lbl.className = 'switch-label'; }
-
+    if (lbl) { lbl.textContent = '…'; lbl.className = 'toggle-lbl'; }
     const p = this.personas.find(x => x.id === personId);
-    const dayData = SEMANA_1[this.selectedDayIdx];
-
+    const dayData = TODOS.find(d => d.cue === this.activeCue);
     try {
-      if (nuevoEstado) {
-        // Crear registro en verificacion
-        const record = {
+      if (val) {
+        const rec = {
           fecha: hoyISO(), hora: horaLocal(),
           semana: dayData.semana, dia: dayData.dia,
-          escuela: dayData.escuela, cue: dayData.cue,
-          rol: p.rol || '', apellido_nombre: p.nombre, dni: p.dni || null,
-          cargo: p.cargo || '', turno: p.turno || '',
+          escuela: dayData.escuela, cue: dayData.cue, nivel: dayData.nivel||'',
+          rol: p.rol||'', apellido_nombre: p.nombre, dni: p.dni||null,
+          cargo: p.cargo||'', turno: p.turno||'',
           capacitado: p.asistio, esNuevo: false
         };
-        const docRef = await db.collection('verificacion').add(record);
-        p.verifId = docRef.id;
-        p.presente = true;
+        const ref = await db.collection('verificacion').add(rec);
+        p.verifId = ref.id; p.presente = true;
       } else {
-        // Eliminar registro
-        if (p.verifId) {
-          await db.collection('verificacion').doc(p.verifId).delete();
-          p.verifId = null;
-        }
+        if (p.verifId) { await db.collection('verificacion').doc(p.verifId).delete(); p.verifId = null; }
         p.presente = false;
       }
-
-      if(lbl) {
-        lbl.textContent = 'Pr\u00e1ctica';
-        lbl.className = `switch-label ${nuevoEstado ? 'yes' : ''}`;
-      }
+      // Actualizar fila visualmente sin re-renderizar todo
+      const row = checkbox.closest('.person-row');
+      if (row) row.classList.toggle('is-present', val);
+      if (lbl) { lbl.textContent = 'Práctica'; lbl.className = `toggle-lbl ${val ? 'on-prac' : ''}`; }
       checkbox.disabled = false;
-      this.updateStatsUI();
+      this.updateStats();
     } catch(e) {
       alert('Error: ' + e.message);
-      checkbox.checked = !nuevoEstado;
-      checkbox.disabled = false;
-      if(lbl) {
-        lbl.textContent = 'Pr\u00e1ctica';
-        lbl.className = `switch-label ${!nuevoEstado ? 'yes' : ''}`;
-      }
+      checkbox.checked = !val; checkbox.disabled = false;
+      if (lbl) { lbl.textContent = 'Práctica'; lbl.className = `toggle-lbl ${!val ? 'on-prac' : ''}`; }
     }
   },
 
-  updateStatsUI() {
-    const searchEl = document.getElementById('search');
-    const q = searchEl ? searchEl.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : '';
-    const filtered = this.personas.filter(x => {
-      const nom = (x.nombre||'').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const dni = String(x.dni||'');
-      return nom.includes(q) || dni.includes(q);
-    });
+  // ── Actualizar stats sin re-renderizar lista ─────────────────
+  updateStats() {
+    const statsEl = document.getElementById('stats-row');
+    if (!statsEl) return;
+    const q = norm(document.getElementById('search')?.value || '');
+    const filtered = this.personas.filter(p =>
+      norm(p.nombre).includes(q) || String(p.dni||'').includes(q)
+    );
     const total = filtered.length;
-    const asistieronCap = filtered.filter(x => x.asistio).length;
-    const asistieronPrac = filtered.filter(x => x.presente).length;
-    document.getElementById('stats-bar').innerHTML = `
-      <div>Total: ${total}</div>
-      <div style="color:#2563EB">Capacitados: ${asistieronCap}</div>
-      <div style="color:#166534">En pr\u00e1ctica: ${asistieronPrac}</div>
+    const cap   = filtered.filter(p => p.asistio).length;
+    const prac  = filtered.filter(p => p.presente).length;
+    const pend  = total - prac;
+    statsEl.innerHTML = `
+      <div class="stat-card total"><div class="stat-num">${total}</div><div class="stat-lbl">Total</div></div>
+      <div class="stat-card cap"><div class="stat-num">${cap}</div><div class="stat-lbl">Capacitados</div></div>
+      <div class="stat-card prac"><div class="stat-num">${prac}</div><div class="stat-lbl">En práctica</div></div>
+      <div class="stat-card pend"><div class="stat-num">${pend}</div><div class="stat-lbl">Pendientes</div></div>
     `;
   },
-  
+
+  // ── Exportar Excel ───────────────────────────────────────────
   async exportExcel() {
     const btn = document.getElementById('btn-export');
-    btn.disabled = true;
-    btn.textContent = 'Exportando...';
-
+    btn.disabled = true; btn.textContent = 'Exportando…';
     try {
-      // Para exportar todo cruzado necesitamos ambas colecciones globales
-      const snapCap = await db.collection('capacitacion').get();
-      const snapVerif = await db.collection('verificacion').get();
-      
-      if(snapCap.empty) { alert("No hay datos"); btn.disabled=false; btn.textContent='Exportar Todos'; return; }
-      
-      const verifMap = new Set();
+      const [snapCap, snapVerif] = await Promise.all([
+        db.collection('capacitacion').get(),
+        db.collection('verificacion').get()
+      ]);
+      if (snapCap.empty) { alert('No hay datos'); btn.disabled=false; btn.textContent='Exportar Excel'; return; }
+
+      // Construir mapa de verificaciones: clave = dni o nombre normalizado
+      // Guardamos también el día para poder cruzar por semana
+      const verifByCue = {}; // cue → Set de claves verificadas
       snapVerif.docs.forEach(doc => {
         const d = doc.data();
-        if(d.dni) verifMap.add(String(d.dni));
-        if(d.apellido_nombre) verifMap.add(d.apellido_nombre.toLowerCase().trim());
+        const cue = d.cue || '';
+        if (!verifByCue[cue]) verifByCue[cue] = new Set();
+        if (d.dni) verifByCue[cue].add(String(d.dni));
+        if (d.apellido_nombre) verifByCue[cue].add(d.apellido_nombre.toLowerCase().trim());
       });
 
-      const rows = snapCap.docs.map(doc => {
+      // Mapear CUE → semana usando TODOS
+      const cueToSemana = {};
+      TODOS.forEach(d => { cueToSemana[d.cue] = d.semana; });
+
+      // Construir filas separadas por semana
+      const rowsBySemana = { 1: [], 2: [], otros: [] };
+
+      snapCap.docs.forEach(doc => {
         const d = doc.data();
-        const presente = (d.dni && verifMap.has(String(d.dni))) || (d.nombre && verifMap.has(d.nombre.toLowerCase().trim()));
-        return {
-          'CUE': d.cue || '',
-          'Escuela': d.escuela || '',
-          'DNI': d.dni || '',
-          'Apellido y Nombre': d.nombre || '',
-          'Rol': d.rol || '',
-          'Cargo': d.cargo || '',
-          'Nivel': d.nivel || '',
-          'Turno': d.turno || '',
-          'Capacitado': d.asistio ? 'S\u00cd' : 'NO',
-          'Asisti\u00f3 Pr\u00e1ctica': presente ? 'S\u00cd' : 'NO'
+        const cue = d.cue || '';
+        const verifSet = verifByCue[cue] || new Set();
+        const presente = (d.dni && verifSet.has(String(d.dni))) ||
+                         (d.nombre && verifSet.has(d.nombre.toLowerCase().trim()));
+        const semana = cueToSemana[cue] || 0;
+
+        const row = {
+          'CUE':               cue,
+          'Escuela':           d.escuela || '',
+          'DNI':               d.dni     || '',
+          'Apellido y Nombre': d.nombre  || '',
+          'Rol':               d.rol     || '',
+          'Tipo':              d.tipo    || '',
+          'Cargo':             d.cargo   || '',
+          'Nivel':             d.nivel   || '',
+          'Turno':             d.turno   || '',
+          'Capacitado':        d.asistio ? 'SÍ' : 'NO',
+          'Asistió Práctica':  presente  ? 'SÍ' : 'NO'
         };
+
+        if (semana === 1)      rowsBySemana[1].push(row);
+        else if (semana === 2) rowsBySemana[2].push(row);
+        else                   rowsBySemana.otros.push(row);
       });
 
-      rows.sort((a,b) => (a.CUE.localeCompare(b.CUE)) || (a['Apellido y Nombre'].localeCompare(b['Apellido y Nombre'])));
+      // Ordenar cada hoja por CUE y luego nombre
+      const sortRows = rows => rows.sort((a,b) =>
+        a.CUE.localeCompare(b.CUE) || a['Apellido y Nombre'].localeCompare(b['Apellido y Nombre'])
+      );
 
-      const ws = XLSX.utils.json_to_sheet(rows);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Datos Globales');
 
-      XLSX.writeFile(wb, `Reporte_Completo_${hoyISO()}.xlsx`);
-    } catch(e) {
-      alert('Error: ' + e.message);
-    }
-    btn.disabled = false;
-    btn.textContent = 'Exportar Todos';
+      // Hoja Semana 1
+      if (rowsBySemana[1].length) {
+        sortRows(rowsBySemana[1]);
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rowsBySemana[1]), 'Semana 1');
+      }
+
+      // Hoja Semana 2
+      if (rowsBySemana[2].length) {
+        sortRows(rowsBySemana[2]);
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rowsBySemana[2]), 'Semana 2');
+      }
+
+      // Hoja con todos los datos combinados
+      const allRows = sortRows([...rowsBySemana[1], ...rowsBySemana[2], ...rowsBySemana.otros]);
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(allRows), 'Todos');
+
+      // Hoja extra si hay registros sin semana asignada
+      if (rowsBySemana.otros.length) {
+        sortRows(rowsBySemana.otros);
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rowsBySemana.otros), 'Sin semana');
+      }
+
+      XLSX.writeFile(wb, `Reporte_META_${hoyISO()}.xlsx`);
+    } catch(e) { alert('Error: ' + e.message); console.error(e); }
+    btn.disabled = false; btn.textContent = 'Exportar Excel';
+  },
+
+  // ── Error state ──────────────────────────────────────────────
+  showError(msg) {
+    const main = document.getElementById('main');
+    if (main) main.innerHTML = `<div class="empty"><div class="empty-title" style="color:#DC2626">${msg}</div></div>`;
   }
 };
 
