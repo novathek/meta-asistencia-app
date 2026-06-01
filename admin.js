@@ -28,7 +28,22 @@ const SEMANA_2 = [
   { semana:2, dia:9, escuela:'ESCUELA SECUNDARIA N\u00b0 92',                             nivel:'SECUNDARIA', cue:'100091400S' }
 ];
 
-const TODOS = [...SEMANA_1, ...SEMANA_2];
+const SEMANA_3 = [
+  { semana:3, dia:10, escuela:'COLEGIO PRIVADO JUAN PABLO II',                                    nivel:'SECUNDARIA', cue:'100007800S' },
+  { semana:3, dia:10, escuela:'ESCUELA N\u00b0 182 "LUIS LEOPOLDO FRANCO"',                       nivel:'PRIMARIA',   cue:'100002700P' },
+  { semana:3, dia:10, escuela:'ESCUELA N\u00b0196 GOBERNADOR CRISANTO GOMEZ',                     nivel:'PRIMARIA',   cue:'100083400P' },
+  { semana:3, dia:10, escuela:'ESCUELA PRIVADA VIRGEN NI\u00d1A',                                 nivel:'SECUNDARIA', cue:'100044200S' },
+  { semana:3, dia:11, escuela:'COLEGIO PRIVADO F.A.S.T.A.',                                       nivel:'PRIMARIA',   cue:'100061000P' },
+  { semana:3, dia:11, escuela:'ESCUELA N\u00b0 180 "REP\u00daBLICA ARGENTINA"',                   nivel:'PRIMARIA',   cue:'100002000P' },
+  { semana:3, dia:12, escuela:'COLEGIO PRIVADO PIA DIDOMENICO',                                   nivel:'SECUNDARIA', cue:'100060700S' },
+  { semana:3, dia:13, escuela:'COLEGIO PRIVADO ENRIQUE G.HOOD',                                   nivel:'PRIMARIA',   cue:'100002400P' },
+  { semana:3, dia:13, escuela:'COLEGIO PRIVADO GENERAL MANUEL BELGRANO',                          nivel:'PRIMARIA',   cue:'100008800P' },
+  { semana:3, dia:14, escuela:'COLEGIO PRIVADO PADRE RAMON DE LA QUINTANA',                       nivel:'SECUNDARIA', cue:'100061300S' },
+  { semana:3, dia:14, escuela:'ESCUELA N\u00b0 127 SAN JOSE OBRERO',                              nivel:'PRIMARIA',   cue:'100009700P' },
+  { semana:3, dia:14, escuela:'COLEGIO SANTA ROSA DE LIMA',                                       nivel:'PRIMARIA',   cue:'100034500P' }
+];
+
+const TODOS = [...SEMANA_1, ...SEMANA_2, ...SEMANA_3];
 
 // ── Helpers ──────────────────────────────────────────────────────
 function hoyISO() {
@@ -203,11 +218,16 @@ const Admin = {
     `;
 
     try {
-      const [snapCap, snapVerif] = await Promise.all([
+      const [snapCap, snapVerif, snapNuevosCue, snapNuevosSinCue] = await Promise.all([
         db.collection('capacitacion').where('cue', '==', cue).get(),
-        db.collection('verificacion').where('dia', '==', dayData.dia).where('cue', '==', cue).get()
+        db.collection('verificacion').where('dia', '==', dayData.dia).where('cue', '==', cue).get(),
+        // Registros directos que declararon este CUE exacto
+        db.collection('asistencia').where('cue', '==', cue).where('esNuevo', '==', true).get(),
+        // Registros directos sin CUE (campo vacío) — los mostramos igual para no perderlos
+        db.collection('asistencia').where('cue', '==', '').where('esNuevo', '==', true).get()
       ]);
 
+      // Mapa de verificaciones: dni/nombre → docId
       const verifMap = new Map();
       snapVerif.docs.forEach(doc => {
         const d = doc.data();
@@ -215,15 +235,77 @@ const Admin = {
         if (d.apellido_nombre) verifMap.set(d.apellido_nombre.toLowerCase().trim(), doc.id);
       });
 
+      // Personas del padrón base
       this.personas = snapCap.docs.map(doc => {
         const d = doc.data();
         let verifId = null;
         if (d.dni && verifMap.has(String(d.dni))) verifId = verifMap.get(String(d.dni));
         else if (d.nombre && verifMap.has(d.nombre.toLowerCase().trim())) verifId = verifMap.get(d.nombre.toLowerCase().trim());
-        return { id: doc.id, ...d, verifId, presente: !!verifId };
+        return { id: doc.id, ...d, verifId, presente: !!verifId, esNuevo: false };
       });
 
-      this.personas.sort((a,b) => (a.nombre||'').localeCompare(b.nombre||''));
+      // Set de DNIs/nombres ya en el padrón para evitar duplicados
+      const padronDNIs    = new Set(this.personas.map(p => p.dni ? String(p.dni) : null).filter(Boolean));
+      const padronNombres = new Set(this.personas.map(p => norm(p.nombre || '')).filter(Boolean));
+
+      // Función para agregar un registro nuevo si no está ya en el padrón
+      const agregarNuevo = (doc, sinCue = false) => {
+        const d = doc.data();
+        const dniStr  = d.dni ? String(d.dni) : null;
+        const nomNorm = norm(d.apellido_nombre || '');
+
+        if (dniStr && padronDNIs.has(dniStr)) return;
+        if (nomNorm && padronNombres.has(nomNorm)) return;
+
+        // Si no tiene CUE, filtrar por nombre de escuela como fallback
+        if (sinCue) {
+          const escNorm = norm(d.escuela || '');
+          const cueNorm = norm(dayData.escuela);
+          // Solo incluir si el nombre de escuela coincide o si no declaró ninguna escuela
+          if (escNorm && !escNorm.includes(cueNorm.substring(0, 8)) && !cueNorm.includes(escNorm.substring(0, 8))) {
+            // No coincide con esta escuela, saltar
+            return;
+          }
+        }
+
+        let verifId = null;
+        if (dniStr && verifMap.has(dniStr)) verifId = verifMap.get(dniStr);
+        else if (d.apellido_nombre && verifMap.has(d.apellido_nombre.toLowerCase().trim()))
+          verifId = verifMap.get(d.apellido_nombre.toLowerCase().trim());
+
+        this.personas.push({
+          id:             doc.id,
+          nombre:         d.apellido_nombre || '',
+          dni:            d.dni || null,
+          rol:            d.role || d.rol || '',
+          cargo:          d.cargo || '',
+          turno:          d.turno || '',
+          tipo:           d.tipo || '',
+          nivel:          d.nivel || '',
+          escuela:        d.escuela || '',
+          cue:            d.cue || '',
+          asistio:        false,
+          verifId,
+          presente:       !!verifId,
+          esNuevo:        true,
+          sinCueAsignado: sinCue,
+          fechaRegistro:  d.fecha || '',
+          horaRegistro:   d.hora  || '',
+        });
+
+        if (dniStr)   padronDNIs.add(dniStr);
+        if (nomNorm)  padronNombres.add(nomNorm);
+      };
+
+      snapNuevosCue.docs.forEach(doc => agregarNuevo(doc, false));
+      snapNuevosSinCue.docs.forEach(doc => agregarNuevo(doc, true));
+
+      // Ordenar: padrón primero (alfabético), nuevos al final
+      this.personas.sort((a,b) => {
+        if (a.esNuevo !== b.esNuevo) return a.esNuevo ? 1 : -1;
+        return (a.nombre||'').localeCompare(b.nombre||'');
+      });
+
       this.renderList();
     } catch(e) {
       console.error(e);
@@ -243,10 +325,11 @@ const Admin = {
     );
 
     // Stats
-    const total = filtered.length;
-    const cap   = filtered.filter(p => p.asistio).length;
-    const prac  = filtered.filter(p => p.presente).length;
-    const pend  = total - prac;
+    const total  = filtered.length;
+    const cap    = filtered.filter(p => p.asistio).length;
+    const prac   = filtered.filter(p => p.presente).length;
+    const pend   = total - prac;
+    const nuevos = filtered.filter(p => p.esNuevo).length;
 
     if (statsEl) {
       statsEl.style.display = 'flex';
@@ -255,6 +338,7 @@ const Admin = {
         <div class="stat-card cap"><div class="stat-num">${cap}</div><div class="stat-lbl">Capacitados</div></div>
         <div class="stat-card prac"><div class="stat-num">${prac}</div><div class="stat-lbl">En práctica</div></div>
         <div class="stat-card pend"><div class="stat-num">${pend}</div><div class="stat-lbl">Pendientes</div></div>
+        ${nuevos ? `<div class="stat-card nuevo"><div class="stat-num">${nuevos}</div><div class="stat-lbl">Rec. registrados</div></div>` : ''}
       `;
     }
 
@@ -263,12 +347,22 @@ const Admin = {
       return;
     }
 
-    listEl.innerHTML = filtered.map(p => `
-      <div class="person-row${p.presente ? ' is-present' : ''}">
+    listEl.innerHTML = filtered.map(p => {
+      const rowClass = p.esNuevo ? ' is-nuevo' : (p.presente ? ' is-present' : '');
+      const badgeNuevo = p.esNuevo
+        ? p.sinCueAsignado
+          ? `<span class="tag tag-nuevo">⚡ Recién registrado · sin escuela asignada${p.fechaRegistro ? ' · ' + p.fechaRegistro : ''}</span>`
+          : `<span class="tag tag-nuevo">⚡ Recién registrado${p.fechaRegistro ? ' · ' + p.fechaRegistro : ''}</span>`
+        : '';
+      // Toggle capacitación deshabilitado para nuevos (no están en el padrón)
+      const capDisabled = p.esNuevo ? 'disabled title="No está en el padrón de capacitación"' : '';
+      return `
+      <div class="person-row${rowClass}">
         <div class="person-info">
           <div class="person-name">${p.nombre}</div>
           <div class="person-meta">DNI: ${p.dni||'S/D'} &bull; ${p.rol||'S/D'}</div>
           <div class="person-tags">
+            ${badgeNuevo}
             ${p.tipo  ? `<span class="tag tag-tipo">${p.tipo}</span>` : ''}
             ${p.cargo ? `<span class="tag tag-cargo">${p.cargo}</span>` : ''}
             ${p.turno ? `<span class="tag tag-turno">T. ${p.turno}</span>` : ''}
@@ -278,7 +372,7 @@ const Admin = {
           <div class="toggle-wrap">
             <div class="toggle-lbl ${p.asistio ? 'on-cap' : ''}" id="lbl-cap-${p.id}">Capacit.</div>
             <label class="sw">
-              <input type="checkbox" id="chk-cap-${p.id}" ${p.asistio ? 'checked' : ''}
+              <input type="checkbox" id="chk-cap-${p.id}" ${p.asistio ? 'checked' : ''} ${capDisabled}
                 onchange="Admin.toggleCapacitacion('${p.id}', this)">
               <span class="sw-track blue"></span>
             </label>
@@ -292,8 +386,8 @@ const Admin = {
             </label>
           </div>
         </div>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
   },
 
   // ── Toggle Capacitación ──────────────────────────────────────
@@ -361,15 +455,17 @@ const Admin = {
     const filtered = this.personas.filter(p =>
       norm(p.nombre).includes(q) || String(p.dni||'').includes(q)
     );
-    const total = filtered.length;
-    const cap   = filtered.filter(p => p.asistio).length;
-    const prac  = filtered.filter(p => p.presente).length;
-    const pend  = total - prac;
+    const total  = filtered.length;
+    const cap    = filtered.filter(p => p.asistio).length;
+    const prac   = filtered.filter(p => p.presente).length;
+    const pend   = total - prac;
+    const nuevos = filtered.filter(p => p.esNuevo).length;
     statsEl.innerHTML = `
       <div class="stat-card total"><div class="stat-num">${total}</div><div class="stat-lbl">Total</div></div>
       <div class="stat-card cap"><div class="stat-num">${cap}</div><div class="stat-lbl">Capacitados</div></div>
       <div class="stat-card prac"><div class="stat-num">${prac}</div><div class="stat-lbl">En práctica</div></div>
       <div class="stat-card pend"><div class="stat-num">${pend}</div><div class="stat-lbl">Pendientes</div></div>
+      ${nuevos ? `<div class="stat-card nuevo"><div class="stat-num">${nuevos}</div><div class="stat-lbl">Rec. registrados</div></div>` : ''}
     `;
   },
 
@@ -378,84 +474,159 @@ const Admin = {
     const btn = document.getElementById('btn-export');
     btn.disabled = true; btn.textContent = 'Exportando…';
     try {
-      const [snapCap, snapVerif] = await Promise.all([
+      const [snapCap, snapAsist, snapVerif] = await Promise.all([
         db.collection('capacitacion').get(),
+        db.collection('asistencia').get(),
         db.collection('verificacion').get()
       ]);
-      if (snapCap.empty) { alert('No hay datos'); btn.disabled=false; btn.textContent='Exportar Excel'; return; }
+      if (snapCap.empty) { alert('No hay datos en el padrón'); btn.disabled=false; btn.textContent='Exportar Excel'; return; }
 
-      // Construir mapa de verificaciones: clave = dni o nombre normalizado
-      // Guardamos también el día para poder cruzar por semana
-      const verifByCue = {}; // cue → Set de claves verificadas
-      snapVerif.docs.forEach(doc => {
+      // ── Índice de asistencia: dni → registro (o nombre → registro como fallback)
+      // Guardamos el primero encontrado por persona (puede haber varios si registró más de una vez)
+      const asistByDni  = new Map(); // String(dni) → {fecha, hora, esNuevo, role, ...}
+      const asistByNom  = new Map(); // norm(nombre) → {fecha, hora, esNuevo, role, ...}
+      snapAsist.docs.forEach(doc => {
         const d = doc.data();
-        const cue = d.cue || '';
-        if (!verifByCue[cue]) verifByCue[cue] = new Set();
-        if (d.dni) verifByCue[cue].add(String(d.dni));
-        if (d.apellido_nombre) verifByCue[cue].add(d.apellido_nombre.toLowerCase().trim());
+        const key = d.dni ? String(d.dni) : null;
+        const nom = norm(d.apellido_nombre || '');
+        const entry = {
+          fechaRegistro: d.fecha || '',
+          horaRegistro:  d.hora  || '',
+          esNuevo:       !!d.esNuevo,
+          rolRegistro:   d.role  || d.rol || '',
+          mailRegistro:  d.mail  || '',
+          telRegistro:   d.telefono || '',
+        };
+        if (key && !asistByDni.has(key)) asistByDni.set(key, entry);
+        if (nom && !asistByNom.has(nom))  asistByNom.set(nom, entry);
       });
 
-      // Mapear CUE → semana usando TODOS
+      // ── Índice de verificación (práctica): dni → registro
+      const verifByDni = new Map(); // String(dni) → {fecha, hora, semana, dia, capacitado}
+      const verifByNom = new Map(); // norm(nombre) → {fecha, hora, semana, dia, capacitado}
+      snapVerif.docs.forEach(doc => {
+        const d = doc.data();
+        const key = d.dni ? String(d.dni) : null;
+        const nom = norm(d.apellido_nombre || '');
+        const entry = {
+          fechaPractica:  d.fecha    || '',
+          horaPractica:   d.hora     || '',
+          semana:         d.semana   != null ? String(d.semana) : '',
+          dia:            d.dia      != null ? String(d.dia)    : '',
+          escuelaPractica:d.escuela  || '',
+          cuePractica:    d.cue      || '',
+          capacitadoVerif:d.capacitado ? 'SÍ' : 'NO',
+        };
+        if (key && !verifByDni.has(key)) verifByDni.set(key, entry);
+        if (nom && !verifByNom.has(nom))  verifByNom.set(nom, entry);
+      });
+
+      // ── Mapear CUE → semana
       const cueToSemana = {};
       TODOS.forEach(d => { cueToSemana[d.cue] = d.semana; });
 
-      // Construir filas separadas por semana
-      const rowsBySemana = { 1: [], 2: [], otros: [] };
+      // ── Función para buscar en índice por dni o nombre
+      const lookup = (map1, map2, dni, nombre) => {
+        if (dni && map1.has(String(dni))) return map1.get(String(dni));
+        const n = norm(nombre || '');
+        if (n && map2.has(n)) return map2.get(n);
+        return null;
+      };
+
+      // ── Construir filas del padrón enriquecidas
+      const rowsBySemana = { 1: [], 2: [], 3: [], otros: [] };
 
       snapCap.docs.forEach(doc => {
         const d = doc.data();
-        const cue = d.cue || '';
-        const verifSet = verifByCue[cue] || new Set();
-        const presente = (d.dni && verifSet.has(String(d.dni))) ||
-                         (d.nombre && verifSet.has(d.nombre.toLowerCase().trim()));
+        const cue    = d.cue || '';
         const semana = cueToSemana[cue] || 0;
 
+        const asist = lookup(asistByDni, asistByNom, d.dni, d.nombre);
+        const verif = lookup(verifByDni, verifByNom, d.dni, d.nombre);
+
         const row = {
-          'CUE':               cue,
-          'Escuela':           d.escuela || '',
-          'DNI':               d.dni     || '',
-          'Apellido y Nombre': d.nombre  || '',
-          'Rol':               d.rol     || '',
-          'Tipo':              d.tipo    || '',
-          'Cargo':             d.cargo   || '',
-          'Nivel':             d.nivel   || '',
-          'Turno':             d.turno   || '',
-          'Capacitado':        d.asistio ? 'SÍ' : 'NO',
-          'Asistió Práctica':  presente  ? 'SÍ' : 'NO'
+          // Datos del padrón
+          'CUE':                cue,
+          'Escuela':            d.escuela  || '',
+          'Semana':             semana     || '',
+          'DNI':                d.dni      || '',
+          'Apellido y Nombre':  d.nombre   || '',
+          'Rol':                d.rol      || '',
+          'Tipo':               d.tipo     || '',
+          'Cargo':              d.cargo    || '',
+          'Nivel':              d.nivel    || '',
+          'Turno':              d.turno    || '',
+          // Estado capacitación
+          'Capacitado':         d.asistio  ? 'SÍ' : 'NO',
+          // Registro de asistencia (app móvil)
+          'Fecha Registro':     asist?.fechaRegistro || '',
+          'Hora Registro':      asist?.horaRegistro  || '',
+          'Recién Registrado':  asist?.esNuevo       ? 'SÍ' : 'NO',
+          // Confirmación de práctica (admin)
+          'Asistió Práctica':   verif ? 'SÍ' : 'NO',
+          'Fecha Práctica':     verif?.fechaPractica  || '',
+          'Hora Práctica':      verif?.horaPractica   || '',
+          'Día Operativo':      verif?.dia            || '',
         };
 
         if (semana === 1)      rowsBySemana[1].push(row);
         else if (semana === 2) rowsBySemana[2].push(row);
+        else if (semana === 3) rowsBySemana[3].push(row);
         else                   rowsBySemana.otros.push(row);
       });
 
-      // Ordenar cada hoja por CUE y luego nombre
+      // ── Hoja extra: todos los registros directos (esNuevo) con sus datos completos
+      const rowsNuevos = [];
+      snapAsist.docs.forEach(doc => {
+        const d = doc.data();
+        if (!d.esNuevo) return;
+        const verif = lookup(verifByDni, verifByNom, d.dni, d.apellido_nombre);
+        rowsNuevos.push({
+          'Fecha Registro':     d.fecha    || '',
+          'Hora Registro':      d.hora     || '',
+          'Rol':                d.role || d.rol || '',
+          'Apellido y Nombre':  d.apellido_nombre || '',
+          'DNI':                d.dni      || '',
+          'CUE Declarado':      d.cue      || '',
+          'Escuela Declarada':  d.escuela  || '',
+          'Cargo':              d.cargo    || '',
+          'Turno':              d.turno    || '',
+          'Mail':               d.mail     || '',
+          'Teléfono':           d.telefono || '',
+          'Asistió Práctica':   verif ? 'SÍ' : 'NO',
+          'Fecha Práctica':     verif?.fechaPractica || '',
+          'Hora Práctica':      verif?.horaPractica  || '',
+          'Día Operativo':      verif?.dia           || '',
+        });
+      });
+      rowsNuevos.sort((a,b) => (a['Fecha Registro']+a['Hora Registro']).localeCompare(b['Fecha Registro']+b['Hora Registro']));
+
+      // ── Ordenar y generar libro
       const sortRows = rows => rows.sort((a,b) =>
-        a.CUE.localeCompare(b.CUE) || a['Apellido y Nombre'].localeCompare(b['Apellido y Nombre'])
+        String(a.CUE||'').localeCompare(String(b.CUE||'')) ||
+        String(a['Apellido y Nombre']||'').localeCompare(String(b['Apellido y Nombre']||''))
       );
 
       const wb = XLSX.utils.book_new();
 
-      // Hoja Semana 1
       if (rowsBySemana[1].length) {
-        sortRows(rowsBySemana[1]);
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rowsBySemana[1]), 'Semana 1');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sortRows(rowsBySemana[1])), 'Semana 1');
       }
-
-      // Hoja Semana 2
       if (rowsBySemana[2].length) {
-        sortRows(rowsBySemana[2]);
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rowsBySemana[2]), 'Semana 2');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sortRows(rowsBySemana[2])), 'Semana 2');
+      }
+      if (rowsBySemana[3].length) {
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sortRows(rowsBySemana[3])), 'Semana 3');
       }
 
-      // Hoja con todos los datos combinados
-      const allRows = sortRows([...rowsBySemana[1], ...rowsBySemana[2], ...rowsBySemana.otros]);
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(allRows), 'Todos');
+      const allPadron = sortRows([...rowsBySemana[1], ...rowsBySemana[2], ...rowsBySemana[3], ...rowsBySemana.otros]);
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(allPadron), 'Todos');
 
-      // Hoja extra si hay registros sin semana asignada
+      if (rowsNuevos.length) {
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rowsNuevos), 'Recién Registrados');
+      }
       if (rowsBySemana.otros.length) {
-        sortRows(rowsBySemana.otros);
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rowsBySemana.otros), 'Sin semana');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sortRows(rowsBySemana.otros)), 'Sin semana');
       }
 
       XLSX.writeFile(wb, `Reporte_META_${hoyISO()}.xlsx`);

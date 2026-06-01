@@ -237,6 +237,7 @@
     .stat-card.cap   .stat-num { color: #2563EB; }
     .stat-card.prac  .stat-num { color: var(--green); }
     .stat-card.pend  .stat-num { color: var(--amber); }
+    .stat-card.nuevo .stat-num { color: var(--violet); }
 
     /* People list */
     .people-wrap { flex: 1; overflow-y: auto; }
@@ -251,6 +252,8 @@
     .person-row:hover { background: #FAFAFA; }
     .person-row.is-present { background: #F0FDF4; }
     .person-row.is-present:hover { background: #DCFCE7; }
+    .person-row.is-nuevo { background: #FAF5FF; border-left: 3px solid var(--violet); }
+    .person-row.is-nuevo:hover { background: #F5F3FF; }
 
     .person-info { flex: 1; min-width: 0; }
     .person-name { font-weight: 600; font-size: .9rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -260,6 +263,7 @@
     .tag-tipo  { background: var(--amber-light); color: #92400E; }
     .tag-cargo { background: var(--surface); color: var(--text-2); border: 1px solid var(--border); }
     .tag-turno { background: #F3E8FF; color: #6B21A8; }
+    .tag-nuevo { background: #F5F3FF; color: var(--violet); border: 1px solid #DDD6FE; font-weight: 800; }
 
     /* Toggles */
     .toggles { display: flex; gap: 20px; align-items: center; flex-shrink: 0; }
