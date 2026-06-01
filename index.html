@@ -1228,9 +1228,8 @@
             }
           });
 
-          // 4. Personas ya verificadas hoy en esta escuela
+          // 4. Personas ya verificadas en esta escuela (sin filtro de fecha — muestra todos los días)
           const snapVerif = await db.collection('verificacion')
-            .where('fecha', '==', hoy)
             .where('cue', '==', dia.cue)
             .get();
           snapVerif.docs.forEach(doc => {
