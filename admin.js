@@ -43,7 +43,24 @@ const SEMANA_3 = [
   { semana:3, dia:14, escuela:'COLEGIO SANTA ROSA DE LIMA',                                       nivel:'PRIMARIA',   cue:'100034500P' }
 ];
 
-const TODOS = [...SEMANA_1, ...SEMANA_2, ...SEMANA_3];
+const SEMANA_4 = [
+  { semana:4, dia:15, escuela:'COLEGIO PRIVADO SRA. DEL VALLE',                                    nivel:'SECUNDARIA', cue:'100002800S' },
+  { semana:4, dia:15, escuela:'COLEGIO PRIVADO PIA DIDOMENICO',                                    nivel:'PRIMARIA',   cue:'100060700P' },
+  { semana:4, dia:16, escuela:'ESCUELA N\u00b0 428 "DR. ENRIQUE OCAMPO"',                          nivel:'PRIMARIA',   cue:'100034400P' },
+  { semana:4, dia:16, escuela:'ESCUELA SECUNDARIA N\u00b07 "GRAL. JOSE MARIA PAZ"',                nivel:'SECUNDARIA', cue:'100034600S' },
+  { semana:4, dia:17, escuela:'CENTRO EDUCATIVO N\u00b04 "DR. ROMIS AMADO RAIDEN" \u2013 PRI',     nivel:'PRIMARIA',   cue:'100085800P' },
+  { semana:4, dia:17, escuela:'CENTRO EDUCATIVO N\u00b04 "DR. ROMIS AMADO RAIDEN" \u2013 SEC',     nivel:'SECUNDARIA', cue:'100085800S' },
+  { semana:4, dia:17, escuela:'ESCUELA N\u00b0 201 WOLF SCHCOLNIK',                                nivel:'PRIMARIA',   cue:'100054100P' },
+  { semana:4, dia:17, escuela:'ESCUELA N\u00b0 272 PROVINCIA DE CORRIENTES',                       nivel:'PRIMARIA',   cue:'100062200P' },
+  { semana:4, dia:18, escuela:'CENTRO EDUCATIVO N\u00b03 "MARIA EMILIA AZAR"',                     nivel:'PRIMARIA',   cue:'100082700P' },
+  { semana:4, dia:18, escuela:'COLEGIO PRIVADO NUESTRA SRA. DE GUADALUPE',                         nivel:'SECUNDARIA', cue:'100060400S' },
+  { semana:4, dia:30, escuela:'ESCUELA N\u00b0 126 BARRIO APOLO',                                  nivel:'PRIMARIA',   cue:'100040400P', esRezagados:true },
+  { semana:4, dia:30, escuela:'ESCUELA PRIVADA "MARIA MONTESSORI"',                                nivel:'PRIMARIA',   cue:'100080500P', esRezagados:true },
+  { semana:4, dia:30, escuela:'ESCUELA SECUNDARIA N\u00b0 92',                                     nivel:'SECUNDARIA', cue:'100091400S', esRezagados:true },
+  { semana:4, dia:30, escuela:'ESCUELA N\u00b0 701 "C. J. ARMSTRONG"',                             nivel:'PRIMARIA',   cue:'100007700P', esRezagados:true }
+];
+
+const TODOS = [...SEMANA_1, ...SEMANA_2, ...SEMANA_3, ...SEMANA_4];
 
 // ── Helpers ──────────────────────────────────────────────────────
 function hoyISO() {
@@ -110,7 +127,7 @@ const Admin = {
               <svg class="tree-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
-              <span class="tree-dia-label">Día ${d.dia}</span>
+              <span class="tree-dia-label">Día ${d.dia}${d.escuelas && d.escuelas[0] && d.escuelas[0].esRezagados ? ' <span style="color:#D97706;font-size:.7rem;">· Rezagados</span>' : ''}</span>
               <span class="tree-dia-count">${d.escuelas.length}</span>
             </div>
             <div class="tree-esc-list">`;
@@ -534,7 +551,7 @@ const Admin = {
       };
 
       // ── Construir filas del padrón enriquecidas
-      const rowsBySemana = { 1: [], 2: [], 3: [], otros: [] };
+      const rowsBySemana = { 1: [], 2: [], 3: [], 4: [], otros: [] };
 
       snapCap.docs.forEach(doc => {
         const d = doc.data();
@@ -572,6 +589,7 @@ const Admin = {
         if (semana === 1)      rowsBySemana[1].push(row);
         else if (semana === 2) rowsBySemana[2].push(row);
         else if (semana === 3) rowsBySemana[3].push(row);
+        else if (semana === 4) rowsBySemana[4].push(row);
         else                   rowsBySemana.otros.push(row);
       });
 
@@ -618,8 +636,11 @@ const Admin = {
       if (rowsBySemana[3].length) {
         XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sortRows(rowsBySemana[3])), 'Semana 3');
       }
+      if (rowsBySemana[4].length) {
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sortRows(rowsBySemana[4])), 'Semana 4');
+      }
 
-      const allPadron = sortRows([...rowsBySemana[1], ...rowsBySemana[2], ...rowsBySemana[3], ...rowsBySemana.otros]);
+      const allPadron = sortRows([...rowsBySemana[1], ...rowsBySemana[2], ...rowsBySemana[3], ...rowsBySemana[4], ...rowsBySemana.otros]);
       XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(allPadron), 'Todos');
 
       if (rowsNuevos.length) {

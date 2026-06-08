@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meta-asistencia-v3';
+const CACHE_NAME = 'meta-asistencia-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

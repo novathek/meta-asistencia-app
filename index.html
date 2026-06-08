@@ -112,6 +112,24 @@
             </div>
           </button>
 
+          <!-- ══ SEMANA 4 ══ -->
+          <button class="role-card semana" id="btn-semana-4" onclick="goSemana(4)">
+            <div class="role-card-leading">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+              </svg>
+            </div>
+            <div class="role-card-body">
+              <div class="role-card-title">Semana 4</div>
+              <div class="role-card-sub">5 días de operativo</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </button>
+
 
 
           <button class="role-card aplicadores" id="btn-role-aplicador" onclick="App.selectRole('aplicador')" style="display:none;">
@@ -448,6 +466,94 @@
             <div class="role-card-body">
               <div class="role-card-title">Día 14</div>
               <div class="role-card-sub">3 escuelas · PRIMARIA / SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+       SCREEN S4 — DÍAS SEMANA 4
+  ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-semana-4">
+
+      <div class="top-app-bar">
+        <button class="icon-btn" onclick="App.goHome()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <span class="top-app-bar-title">Semana 4</span>
+      </div>
+
+      <div class="screen-header">
+        <div class="screen-header-label semana">5 días disponibles</div>
+        <h2 class="screen-title">Seleccioná el día</h2>
+        <p class="screen-desc">Elegí el día para registrar tu asistencia</p>
+      </div>
+
+      <div class="screen-content" style="padding-top:0;">
+        <div class="role-cards">
+
+          <button class="role-card dia" id="btn-dia-15" onclick="selectDayMulti(4,15)">
+            <div class="role-card-leading dia-badge">15</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 15</div>
+              <div class="role-card-sub">2 escuelas · PRIMARIA / SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-16" onclick="selectDayMulti(4,16)">
+            <div class="role-card-leading dia-badge">16</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 16</div>
+              <div class="role-card-sub">2 escuelas · PRIMARIA / SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-17" onclick="selectDayMulti(4,17)">
+            <div class="role-card-leading dia-badge">17</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 17</div>
+              <div class="role-card-sub">4 escuelas · PRIMARIA / SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-18" onclick="selectDayMulti(4,18)">
+            <div class="role-card-leading dia-badge">18</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 18</div>
+              <div class="role-card-sub">2 escuelas · PRIMARIA / SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-30" onclick="selectDayMulti(4,30)" style="border: 2px dashed #F59E0B;">
+            <div class="role-card-leading dia-badge" style="background:#FEF3C7;color:#92400E;">30</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 30 <span style="font-size:.75rem;color:#D97706;font-weight:600;">· Rezagados</span></div>
+              <div class="role-card-sub">4 escuelas · Recuperación</div>
             </div>
             <div class="role-card-trailing">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -1093,6 +1199,48 @@
             { escuela:'COLEGIO PRIVADO PADRE RAMON DE LA QUINTANA',                       nivel:'SECUNDARIA', cue:'100061300S' },
             { escuela:'ESCUELA N\u00b0 127 SAN JOSE OBRERO',                              nivel:'PRIMARIA',   cue:'100009700P' },
             { escuela:'COLEGIO SANTA ROSA DE LIMA',                                       nivel:'PRIMARIA',   cue:'100034500P' }
+          ]
+        }
+      ],
+      4: [
+        {
+          dia: 15,
+          escuelas: [
+            { escuela:'COLEGIO PRIVADO SRA. DEL VALLE',                                   nivel:'SECUNDARIA', cue:'100002800S' },
+            { escuela:'COLEGIO PRIVADO PIA DIDOMENICO',                                   nivel:'PRIMARIA',   cue:'100060700P' }
+          ]
+        },
+        {
+          dia: 16,
+          escuelas: [
+            { escuela:'ESCUELA N\u00b0 428 "DR. ENRIQUE OCAMPO"',                         nivel:'PRIMARIA',   cue:'100034400P' },
+            { escuela:'ESCUELA SECUNDARIA N\u00b07 "GRAL. JOSE MARIA PAZ"',               nivel:'SECUNDARIA', cue:'100034600S' }
+          ]
+        },
+        {
+          dia: 17,
+          escuelas: [
+            { escuela:'CENTRO EDUCATIVO N\u00b04 "DR. ROMIS AMADO RAIDEN" \u2013 PRIMARIA', nivel:'PRIMARIA',   cue:'100085800P' },
+            { escuela:'CENTRO EDUCATIVO N\u00b04 "DR. ROMIS AMADO RAIDEN" \u2013 SECUNDARIA', nivel:'SECUNDARIA', cue:'100085800S' },
+            { escuela:'ESCUELA N\u00b0 201 WOLF SCHCOLNIK',                               nivel:'PRIMARIA',   cue:'100054100P' },
+            { escuela:'ESCUELA N\u00b0 272 PROVINCIA DE CORRIENTES',                      nivel:'PRIMARIA',   cue:'100062200P' }
+          ]
+        },
+        {
+          dia: 18,
+          escuelas: [
+            { escuela:'CENTRO EDUCATIVO N\u00b03 "MARIA EMILIA AZAR"',                    nivel:'PRIMARIA',   cue:'100082700P' },
+            { escuela:'COLEGIO PRIVADO NUESTRA SRA. DE GUADALUPE',                        nivel:'SECUNDARIA', cue:'100060400S' }
+          ]
+        },
+        {
+          dia: 30,
+          esRezagados: true,
+          escuelas: [
+            { escuela:'ESCUELA N\u00b0 126 BARRIO APOLO',                                 nivel:'PRIMARIA',   cue:'100040400P' },
+            { escuela:'ESCUELA PRIVADA "MARIA MONTESSORI"',                               nivel:'PRIMARIA',   cue:'100080500P' },
+            { escuela:'ESCUELA SECUNDARIA N\u00b0 92',                                    nivel:'SECUNDARIA', cue:'100091400S' },
+            { escuela:'ESCUELA N\u00b0 701 "C. J. ARMSTRONG"',                            nivel:'PRIMARIA',   cue:'100007700P' }
           ]
         }
       ]
