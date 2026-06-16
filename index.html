@@ -130,6 +130,24 @@
             </div>
           </button>
 
+          <!-- ══ SEMANA 5 ══ -->
+          <button class="role-card semana" id="btn-semana-5" onclick="goSemana(5)">
+            <div class="role-card-leading">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+              </svg>
+            </div>
+            <div class="role-card-body">
+              <div class="role-card-title">Semana 5</div>
+              <div class="role-card-sub">2 días de operativo</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </button>
+
 
 
           <button class="role-card aplicadores" id="btn-role-aplicador" onclick="App.selectRole('aplicador')" style="display:none;">
@@ -554,6 +572,58 @@
             <div class="role-card-body">
               <div class="role-card-title">Día 30 <span style="font-size:.75rem;color:#D97706;font-weight:600;">· Rezagados</span></div>
               <div class="role-card-sub">4 escuelas · Recuperación</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+       SCREEN S5 — DÍAS SEMANA 5
+  ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-semana-5">
+
+      <div class="top-app-bar">
+        <button class="icon-btn" onclick="App.goHome()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <span class="top-app-bar-title">Semana 5</span>
+      </div>
+
+      <div class="screen-header">
+        <div class="screen-header-label semana">2 días disponibles</div>
+        <h2 class="screen-title">Seleccioná el día</h2>
+        <p class="screen-desc">Elegí el día para registrar tu asistencia</p>
+      </div>
+
+      <div class="screen-content" style="padding-top:0;">
+        <div class="role-cards">
+
+          <button class="role-card dia" id="btn-dia-31" onclick="selectDayMulti(5,31)" style="border: 2px dashed #F59E0B;">
+            <div class="role-card-leading dia-badge" style="background:#FEF3C7;color:#92400E;">31</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 31 <span style="font-size:.75rem;color:#D97706;font-weight:600;">· Rezagados</span></div>
+              <div class="role-card-sub">3 escuelas · Recuperación</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-19" onclick="selectDayMulti(5,19)">
+            <div class="role-card-leading dia-badge">19</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 19 <span style="font-size:.75rem;color:#1A56DB;font-weight:600;">· Capayán</span></div>
+              <div class="role-card-sub">4 escuelas · PRIMARIA</div>
             </div>
             <div class="role-card-trailing">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -1241,6 +1311,26 @@
             { escuela:'ESCUELA PRIVADA "MARIA MONTESSORI"',                               nivel:'PRIMARIA',   cue:'100080500P' },
             { escuela:'ESCUELA SECUNDARIA N\u00b0 92',                                    nivel:'SECUNDARIA', cue:'100091400S' },
             { escuela:'ESCUELA N\u00b0 701 "C. J. ARMSTRONG"',                            nivel:'PRIMARIA',   cue:'100007700P' }
+          ]
+        }
+      ],
+      5: [
+        {
+          dia: 31,
+          esRezagados: true,
+          escuelas: [
+            { escuela:'ESCUELA SECUNDARIA N\u00b0 92',                                    nivel:'SECUNDARIA', cue:'100091400S' },
+            { escuela:'COLEGIO PRIVADO ENRIQUE G.HOOD',                                   nivel:'PRIMARIA',   cue:'100002400P' },
+            { escuela:'ESCUELA SECUNDARIA N\u00b050',                                     nivel:'SECUNDARIA', cue:'100040300S' }
+          ]
+        },
+        {
+          dia: 19,
+          escuelas: [
+            { escuela:'ESCUELA N\u00b0 98 "ANTONIA BENAVENTTI DE BULACIO"',               nivel:'PRIMARIA',   cue:'100033400P' },
+            { escuela:'COLEGIO PRIVADO CLORINDA ORELLANA HERRERA',                        nivel:'PRIMARIA',   cue:'100042100P' },
+            { escuela:'ESCUELA N\u00b0 285 PROVINCIA DEL CHACO',                          nivel:'PRIMARIA',   cue:'100062600P' },
+            { escuela:'ESCUELA N\u00b0 36 "PAULA ALBARRACIN DE SARMIENTO"',               nivel:'PRIMARIA',   cue:'100066500P' }
           ]
         }
       ]

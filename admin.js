@@ -60,7 +60,17 @@ const SEMANA_4 = [
   { semana:4, dia:30, escuela:'ESCUELA N\u00b0 701 "C. J. ARMSTRONG"',                             nivel:'PRIMARIA',   cue:'100007700P', esRezagados:true }
 ];
 
-const TODOS = [...SEMANA_1, ...SEMANA_2, ...SEMANA_3, ...SEMANA_4];
+const SEMANA_5 = [
+  { semana:5, dia:31, escuela:'ESCUELA SECUNDARIA N\u00b0 92',                                     nivel:'SECUNDARIA', cue:'100091400S', esRezagados:true },
+  { semana:5, dia:31, escuela:'COLEGIO PRIVADO ENRIQUE G.HOOD',                                    nivel:'PRIMARIA',   cue:'100002400P', esRezagados:true },
+  { semana:5, dia:31, escuela:'ESCUELA SECUNDARIA N\u00b050',                                      nivel:'SECUNDARIA', cue:'100040300S', esRezagados:true },
+  { semana:5, dia:19, escuela:'ESCUELA N\u00b0 98 "ANTONIA BENAVENTTI DE BULACIO"',                nivel:'PRIMARIA',   cue:'100033400P' },
+  { semana:5, dia:19, escuela:'COLEGIO PRIVADO CLORINDA ORELLANA HERRERA',                         nivel:'PRIMARIA',   cue:'100042100P' },
+  { semana:5, dia:19, escuela:'ESCUELA N\u00b0 285 PROVINCIA DEL CHACO',                           nivel:'PRIMARIA',   cue:'100062600P' },
+  { semana:5, dia:19, escuela:'ESCUELA N\u00b0 36 "PAULA ALBARRACIN DE SARMIENTO"',                nivel:'PRIMARIA',   cue:'100066500P' }
+];
+
+const TODOS = [...SEMANA_1, ...SEMANA_2, ...SEMANA_3, ...SEMANA_4, ...SEMANA_5];
 
 // ── Helpers ──────────────────────────────────────────────────────
 function hoyISO() {
@@ -551,7 +561,7 @@ const Admin = {
       };
 
       // ── Construir filas del padrón enriquecidas
-      const rowsBySemana = { 1: [], 2: [], 3: [], 4: [], otros: [] };
+      const rowsBySemana = { 1: [], 2: [], 3: [], 4: [], 5: [], otros: [] };
 
       snapCap.docs.forEach(doc => {
         const d = doc.data();
@@ -590,6 +600,7 @@ const Admin = {
         else if (semana === 2) rowsBySemana[2].push(row);
         else if (semana === 3) rowsBySemana[3].push(row);
         else if (semana === 4) rowsBySemana[4].push(row);
+        else if (semana === 5) rowsBySemana[5].push(row);
         else                   rowsBySemana.otros.push(row);
       });
 
@@ -639,8 +650,11 @@ const Admin = {
       if (rowsBySemana[4].length) {
         XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sortRows(rowsBySemana[4])), 'Semana 4');
       }
+      if (rowsBySemana[5].length) {
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sortRows(rowsBySemana[5])), 'Semana 5');
+      }
 
-      const allPadron = sortRows([...rowsBySemana[1], ...rowsBySemana[2], ...rowsBySemana[3], ...rowsBySemana[4], ...rowsBySemana.otros]);
+      const allPadron = sortRows([...rowsBySemana[1], ...rowsBySemana[2], ...rowsBySemana[3], ...rowsBySemana[4], ...rowsBySemana[5], ...rowsBySemana.otros]);
       XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(allPadron), 'Todos');
 
       if (rowsNuevos.length) {
