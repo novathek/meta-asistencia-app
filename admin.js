@@ -70,7 +70,22 @@ const SEMANA_5 = [
   { semana:5, dia:19, escuela:'ESCUELA N\u00b0 36 "PAULA ALBARRACIN DE SARMIENTO"',                nivel:'PRIMARIA',   cue:'100066500P' }
 ];
 
-const TODOS = [...SEMANA_1, ...SEMANA_2, ...SEMANA_3, ...SEMANA_4, ...SEMANA_5];
+const SEMANA_6 = [
+  { semana:6, dia:20, escuela:'ESCUELA NRO. 490',                                                  nivel:'PRIMARIA',   cue:'100068000P' },
+  { semana:6, dia:20, escuela:'ESCUELA N\u00b0 29 AUTONOM\u00cdA DE CATAMARCA',                    nivel:'PRIMARIA',   cue:'100041700P' },
+  { semana:6, dia:21, escuela:'E.P.E.T. N\u00b0 8',                                                nivel:'SECUNDARIA', cue:'100085500S' },
+  { semana:6, dia:21, escuela:'ESCUELA N\u00b0 394 PRESIDENCIA DE LA NACION',                      nivel:'PRIMARIA',   cue:'100052000P' },
+  { semana:6, dia:21, escuela:'ESCUELA N\u00b0 228 BARTOLOME MITRE',                               nivel:'PRIMARIA',   cue:'100004500P' },
+  { semana:6, dia:21, escuela:'ESCUELA N\u00b0 294 PCIA.DE LA RIOJA',                              nivel:'PRIMARIA',   cue:'100050600P' },
+  { semana:6, dia:22, escuela:'ESCUELA N\u00b0 227 PCIA.DE RIO NEGRO',                             nivel:'PRIMARIA',   cue:'100057400P' },
+  { semana:6, dia:22, escuela:'COLEGIO PRIVADO JUAN CAYETANO BIANCHI',                             nivel:'PRIMARIA',   cue:'100064200P' },
+  { semana:6, dia:22, escuela:'ESCUELA N\u00b0 391',                                               nivel:'PRIMARIA',   cue:'100057500P' },
+  { semana:6, dia:22, escuela:'ESCUELA N\u00b0 295 GRAL JULIO A.ROCA',                             nivel:'PRIMARIA',   cue:'100024900P' },
+  { semana:6, dia:23, escuela:'ESCUELA N\u00b0 334 "MARIA DEL CARMEN FUENZALIDA"',                 nivel:'PRIMARIA',   cue:'100024400P' },
+  { semana:6, dia:23, escuela:'ESCUELA N\u00b0 392 DANIEL DE JESUS OVEJERO',                       nivel:'PRIMARIA',   cue:'100004600P' }
+];
+
+const TODOS = [...SEMANA_1, ...SEMANA_2, ...SEMANA_3, ...SEMANA_4, ...SEMANA_5, ...SEMANA_6];
 
 // ── Helpers ──────────────────────────────────────────────────────
 function hoyISO() {
@@ -561,7 +576,7 @@ const Admin = {
       };
 
       // ── Construir filas del padrón enriquecidas
-      const rowsBySemana = { 1: [], 2: [], 3: [], 4: [], 5: [], otros: [] };
+      const rowsBySemana = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], otros: [] };
 
       snapCap.docs.forEach(doc => {
         const d = doc.data();
@@ -601,6 +616,7 @@ const Admin = {
         else if (semana === 3) rowsBySemana[3].push(row);
         else if (semana === 4) rowsBySemana[4].push(row);
         else if (semana === 5) rowsBySemana[5].push(row);
+        else if (semana === 6) rowsBySemana[6].push(row);
         else                   rowsBySemana.otros.push(row);
       });
 
@@ -653,8 +669,11 @@ const Admin = {
       if (rowsBySemana[5].length) {
         XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sortRows(rowsBySemana[5])), 'Semana 5');
       }
+      if (rowsBySemana[6].length) {
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sortRows(rowsBySemana[6])), 'Semana 6');
+      }
 
-      const allPadron = sortRows([...rowsBySemana[1], ...rowsBySemana[2], ...rowsBySemana[3], ...rowsBySemana[4], ...rowsBySemana[5], ...rowsBySemana.otros]);
+      const allPadron = sortRows([...rowsBySemana[1], ...rowsBySemana[2], ...rowsBySemana[3], ...rowsBySemana[4], ...rowsBySemana[5], ...rowsBySemana[6], ...rowsBySemana.otros]);
       XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(allPadron), 'Todos');
 
       if (rowsNuevos.length) {

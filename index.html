@@ -148,6 +148,24 @@
             </div>
           </button>
 
+          <!-- ══ SEMANA 6 ══ -->
+          <button class="role-card semana" id="btn-semana-6" onclick="goSemana(6)">
+            <div class="role-card-leading">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+              </svg>
+            </div>
+            <div class="role-card-body">
+              <div class="role-card-title">Semana 6</div>
+              <div class="role-card-sub">4 días de operativo</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </div>
+          </button>
+
 
 
           <button class="role-card aplicadores" id="btn-role-aplicador" onclick="App.selectRole('aplicador')" style="display:none;">
@@ -624,6 +642,82 @@
             <div class="role-card-body">
               <div class="role-card-title">Día 19 <span style="font-size:.75rem;color:#1A56DB;font-weight:600;">· Capayán</span></div>
               <div class="role-card-sub">4 escuelas · PRIMARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+       SCREEN S6 — DÍAS SEMANA 6
+  ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-semana-6">
+
+      <div class="top-app-bar">
+        <button class="icon-btn" onclick="App.goHome()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <span class="top-app-bar-title">Semana 6</span>
+      </div>
+
+      <div class="screen-header">
+        <div class="screen-header-label semana">4 días disponibles</div>
+        <h2 class="screen-title">Seleccioná el día</h2>
+        <p class="screen-desc">Elegí el día para registrar tu asistencia</p>
+      </div>
+
+      <div class="screen-content" style="padding-top:0;">
+        <div class="role-cards">
+
+          <button class="role-card dia" id="btn-dia-20" onclick="selectDayMulti(6,20)">
+            <div class="role-card-leading dia-badge">20</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 20 <span style="font-size:.75rem;color:#1A56DB;font-weight:600;">· Capayán</span></div>
+              <div class="role-card-sub">2 escuelas · PRIMARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-21" onclick="selectDayMulti(6,21)">
+            <div class="role-card-leading dia-badge">21</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 21 <span style="font-size:.75rem;color:#1A56DB;font-weight:600;">· Pomán</span></div>
+              <div class="role-card-sub">4 escuelas · PRIMARIA / SECUNDARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-22" onclick="selectDayMulti(6,22)">
+            <div class="role-card-leading dia-badge">22</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 22 <span style="font-size:.75rem;color:#1A56DB;font-weight:600;">· Pomán</span></div>
+              <div class="role-card-sub">4 escuelas · PRIMARIA</div>
+            </div>
+            <div class="role-card-trailing">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </div>
+          </button>
+
+          <button class="role-card dia" id="btn-dia-23" onclick="selectDayMulti(6,23)">
+            <div class="role-card-leading dia-badge">23</div>
+            <div class="role-card-body">
+              <div class="role-card-title">Día 23 <span style="font-size:.75rem;color:#1A56DB;font-weight:600;">· Pomán</span></div>
+              <div class="role-card-sub">2 escuelas · PRIMARIA</div>
             </div>
             <div class="role-card-trailing">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -1331,6 +1425,40 @@
             { escuela:'COLEGIO PRIVADO CLORINDA ORELLANA HERRERA',                        nivel:'PRIMARIA',   cue:'100042100P' },
             { escuela:'ESCUELA N\u00b0 285 PROVINCIA DEL CHACO',                          nivel:'PRIMARIA',   cue:'100062600P' },
             { escuela:'ESCUELA N\u00b0 36 "PAULA ALBARRACIN DE SARMIENTO"',               nivel:'PRIMARIA',   cue:'100066500P' }
+          ]
+        }
+      ],
+      6: [
+        {
+          dia: 20,
+          escuelas: [
+            { escuela:'ESCUELA NRO. 490',                                                  nivel:'PRIMARIA',   cue:'100068000P' },
+            { escuela:'ESCUELA N\u00b0 29 AUTONOM\u00cdA DE CATAMARCA',                   nivel:'PRIMARIA',   cue:'100041700P' }
+          ]
+        },
+        {
+          dia: 21,
+          escuelas: [
+            { escuela:'E.P.E.T. N\u00b0 8',                                               nivel:'SECUNDARIA', cue:'100085500S' },
+            { escuela:'ESCUELA N\u00b0 394 PRESIDENCIA DE LA NACION',                     nivel:'PRIMARIA',   cue:'100052000P' },
+            { escuela:'ESCUELA N\u00b0 228 BARTOLOME MITRE',                              nivel:'PRIMARIA',   cue:'100004500P' },
+            { escuela:'ESCUELA N\u00b0 294 PCIA.DE LA RIOJA',                             nivel:'PRIMARIA',   cue:'100050600P' }
+          ]
+        },
+        {
+          dia: 22,
+          escuelas: [
+            { escuela:'ESCUELA N\u00b0 227 PCIA.DE RIO NEGRO',                            nivel:'PRIMARIA',   cue:'100057400P' },
+            { escuela:'COLEGIO PRIVADO JUAN CAYETANO BIANCHI',                            nivel:'PRIMARIA',   cue:'100064200P' },
+            { escuela:'ESCUELA N\u00b0 391',                                              nivel:'PRIMARIA',   cue:'100057500P' },
+            { escuela:'ESCUELA N\u00b0 295 GRAL JULIO A.ROCA',                           nivel:'PRIMARIA',   cue:'100024900P' }
+          ]
+        },
+        {
+          dia: 23,
+          escuelas: [
+            { escuela:'ESCUELA N\u00b0 334 "MARIA DEL CARMEN FUENZALIDA"',                nivel:'PRIMARIA',   cue:'100024400P' },
+            { escuela:'ESCUELA N\u00b0 392 DANIEL DE JESUS OVEJERO',                      nivel:'PRIMARIA',   cue:'100004600P' }
           ]
         }
       ]
